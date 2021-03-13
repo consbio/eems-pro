@@ -7,9 +7,9 @@ from collections import OrderedDict
 
 arcpy.CheckOutExtension("spatial")
 
-toolboxDir = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(toolboxDir + os.sep + 'MPilot/MPilot_Python27')
-from MPStdLibraries import MPEEMSCSVIO, MPEEMSFuzzyLogicLib, MPEEMSBasicLib
+#toolboxDir = os.path.dirname(os.path.realpath(__file__))
+#sys.path.append(toolboxDir + os.sep + 'MPilot/MPilot_Python27')
+#from MPStdLibraries import MPEEMSCSVIO, MPEEMSFuzzyLogicLib, MPEEMSBasicLib
 
 runInBackground = True
 cmdFileVarName = "%EEMS Command File Path%"
@@ -310,17 +310,12 @@ class EEMSModelRun(object):
         return
 
     def execute(self, parameters, messages):
+
+        from mpilot.program import Program
+
         # path = os.getcwd()
         # Path where script is running from is C:\WINDOWS\system32
         # Which is why relative import of modules doesn't work.
-
-        # Import MPilot modules by getting directory of this Toolbox file, and appending MPilot_Python27 directory.
-        # The execute tool throws an error if the toolboxDir and module imports happen at the top
-        toolboxDir = os.path.dirname(os.path.realpath(__file__))
-        sys.path.append(toolboxDir + os.sep + 'MPilot/MPilot_Python27')
-        from MPCore import MPilotProgram as mpprog
-        from MPCore import MPilotFramework as mpf
-        from MPCore import MPilotParse as mpp
 
         inputReportingUnits = parameters[2].value
         outputReportingUnits = parameters[1].value
@@ -328,20 +323,33 @@ class EEMSModelRun(object):
 
         messages.addMessage("\nCopying Input Reporting Units to Output Reporting Units...\n"
                          "(Only Keeping OBJECTID and Shape fields)")
-        messages.addMessage(outputReportingUnits)
 
         self.CopyInputRUToOutputRU(inputReportingUnits, outputReportingUnits)
 
         messages.addMessage('\nCreating CSV file from the Input Reporting Units...')
         EEMSCSVFNm = self.CreateCSVFromInputRU(inputReportingUnits, messages)
 
-        messages.addMessage('\nConverting EEMS Command File to a String...')
-        progStr = self.CvtCmdFileToString(mpp, cmdFileNm, inputReportingUnits, EEMSCSVFNm)
+        with open(cmdFileNm) as f:
+            messages.addMessage('\nConverting EEMS Command File to a String...')
+            progStr = f.read()
+            progStr = progStr.replace(inputReportingUnits, EEMSCSVFNm)
+
+            # Parse the MPilot program string and return a new Program representing the model.
+            p = Program.from_source(progStr)
+
+            # Add the CSVID Field to the list of output fields needed.
+            EEMSOutFields = p.commands.keys() + ["CSVID"]
+
+            # Add a READ command for the  CSVID Field.
+            EEMSMPilotRead = p.find_command_class('EEMSRead')
+            p.add_command(EEMSMPilotRead, "CSVID", {'InFileName': EEMSCSVFNm, 'InFieldName': "CSVID"})
+
+            # Add a Write command to write the results out to the CSV file
+            EEMSMPilotWrite = p.find_command_class('EEMSWrite')
+            p.add_command(EEMSMPilotWrite, "Results", {'OutFileName': EEMSCSVFNm, 'OutFieldNames': EEMSOutFields})
 
         messages.addMessage('\nRunning EEMS on the CSV file...')
-        myFw = self.CreateFramework(mpf)
-        with mpprog.MPilotProgram(myFw, sourceProgStr=progStr) as prog:
-            prog.Run()
+        p.run()
 
         messages.addMessage("\nJoining CSV file to Output Reporting Units...")
         self.JoinCSVtoOutputRU(EEMSCSVFNm, outputReportingUnits, messages)
@@ -353,6 +361,7 @@ class EEMSModelRun(object):
 
         inputFieldNames = [f.name for f in arcpy.ListFields(inputReportingUnits)]
         # Copy the input feature class to the output feature class, but only keep the OBJECTID and SHAPE Fields.
+
         outputFieldList = "OBJECTID OBJECTID VISIBLE NONE; Shape Shape VISIBLE NONE"
         for inputFieldName in inputFieldNames:
             if inputFieldName not in ["OBJECTID", "SHAPE"]:
