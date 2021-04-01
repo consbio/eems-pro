@@ -228,9 +228,8 @@ class EEMSModelInitialize(object):
 class EEMSRead(object):
     def __init__(self):
         self.label = "EEMS Read"
-        self.cmdObj = MPEEMSCSVIO.EEMSRead()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "EEMSRead"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -494,9 +493,8 @@ class EEMSModelLogicCheck(object):
 class CvtToFuzzy(object):
     def __init__(self):
         self.label = "Convert to Fuzzy"
-        self.cmdObj = MPEEMSFuzzyLogicLib.CvtToFuzzy()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "CvtToFuzzy"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -547,9 +545,8 @@ class CvtToFuzzy(object):
 class CvtToFuzzyZScore(object):
     def __init__(self):
         self.label = "Convert to Fuzzy Z Score"
-        self.cmdObj = MPEEMSFuzzyLogicLib.CvtToFuzzyZScore()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "CvtToFuzzyZScore"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -600,9 +597,8 @@ class CvtToFuzzyCat(object):
     """ Appears to be a bug in the source code for this operator. Error says Argument name: int_field  Should be one of: ['Integer', 'Positive Integer']  Is: Float"""
     def __init__(self):
         self.label = "Convert to Fuzzy Category"
-        self.cmdObj = MPEEMSFuzzyLogicLib.CvtToFuzzyCat()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "CvtToFuzzyCat"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -658,9 +654,8 @@ class CvtToFuzzyCat(object):
 class CvtToFuzzyCurve(object):
     def __init__(self):
         self.label = "Convert to Fuzzy Curve"
-        self.cmdObj = MPEEMSFuzzyLogicLib.CvtToFuzzyCurve()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = CvtToFuzzyCurve
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -715,9 +710,8 @@ class CvtToFuzzyCurve(object):
 class CvtToFuzzyCurveZScore(object):
     def __init__(self):
         self.label = "Convert to Fuzzy Curve Z Score"
-        self.cmdObj = MPEEMSFuzzyLogicLib.CvtToFuzzyCurveZScore()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "CvtToFuzzyCurveZScore"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -771,9 +765,8 @@ class CvtToFuzzyCurveZScore(object):
 class CvtToBinary(object):
     def __init__(self):
         self.label = "Convert to Binary"
-        self.cmdObj = MPEEMSFuzzyLogicLib.CvtToBinary()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "CvtToBinary"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -822,9 +815,8 @@ class CvtToBinary(object):
 class CvtFromFuzzy(object):
     def __init__(self):
         self.label = "Convert From Fuzzy"
-        self.cmdObj = MPEEMSFuzzyLogicLib.CvtFromFuzzy()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "CvtFromFuzzy"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -872,9 +864,8 @@ class CvtFromFuzzy(object):
 class CvtToFuzzyMeanToMid(object):
     def __init__(self):
         self.label = "Convert to Fuzzy Mean to Mid"
-        self.cmdObj = MPEEMSFuzzyLogicLib.CvtToFuzzyMeanToMid()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "CvtToFuzzyMeanToMid"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -949,9 +940,8 @@ class CvtToFuzzyMeanToMid(object):
 class FuzzyUnion(object):
     def __init__(self):
         self.label = "Fuzzy Union"
-        self.cmdObj = MPEEMSFuzzyLogicLib.FuzzyUnion()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "FuzzyUnion"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -993,9 +983,8 @@ class FuzzyUnion(object):
 class FuzzyWeightedUnion(object):
     def __init__(self):
         self.label = "Fuzzy Weighted Union"
-        self.cmdObj = MPEEMSFuzzyLogicLib.FuzzyWeightedUnion()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "FuzzyWeightedUnion"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1051,9 +1040,8 @@ class FuzzySelectedUnion(object):
     """ Note that this tool and FuzzyXOr require numpy 1.10.0 (uses np.stack). Can't upgrade arcgis version of numpy. """
     def __init__(self):
         self.label = "Fuzzy Selected Union"
-        self.cmdObj = MPEEMSFuzzyLogicLib.FuzzySelectedUnion()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "FuzzySelectedUnion"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1099,9 +1087,8 @@ class FuzzySelectedUnion(object):
 class FuzzyOr(object):
     def __init__(self):
         self.label = "Fuzzy Or"
-        self.cmdObj = MPEEMSFuzzyLogicLib.FuzzyOr()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "FuzzyOr"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1143,9 +1130,8 @@ class FuzzyOr(object):
 class FuzzyAnd(object):
     def __init__(self):
         self.label = "Fuzzy And"
-        self.cmdObj = MPEEMSFuzzyLogicLib.FuzzyAnd()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "FuzzyAnd"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1188,9 +1174,8 @@ class FuzzyXOr(object):
     """ Note that this tool and FuzzySelectedUnion require numpy 1.10.0 (uses np.stack). Can't upgrade arcgis version of numpy. """
     def __init__(self):
         self.label = "Fuzzy XOr"
-        self.cmdObj = MPEEMSFuzzyLogicLib.FuzzyXOr()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "FuzzyXOr"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1232,9 +1217,8 @@ class FuzzyXOr(object):
 class FuzzyNot(object):
     def __init__(self):
         self.label = "Fuzzy Not"
-        self.cmdObj = MPEEMSFuzzyLogicLib.FuzzyNot()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "FuzzyNot"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1279,9 +1263,8 @@ class FuzzyNot(object):
 class AMinusB(object):
     def __init__(self):
         self.label = "X Minus Y"
-        self.cmdObj = MPEEMSBasicLib.AMinusB()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "AMinusB"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1325,9 +1308,8 @@ class AMinusB(object):
 class Sum(object):
     def __init__(self):
         self.label = "Sum"
-        self.cmdObj = MPEEMSBasicLib.Sum()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "Sum"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1369,9 +1351,8 @@ class Sum(object):
 class WeightedSum(object):
     def __init__(self):
         self.label = "Weighted Sum"
-        self.cmdObj = MPEEMSBasicLib.WeightedSum()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "WeightedSum"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1426,9 +1407,8 @@ class WeightedSum(object):
 class Multiply(object):
     def __init__(self):
         self.label = "Multiply"
-        self.cmdObj = MPEEMSBasicLib.Multiply()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "Multiply"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1470,9 +1450,8 @@ class Multiply(object):
 class ADividedByB(object):
     def __init__(self):
         self.label = "X Divided By Y"
-        self.cmdObj = MPEEMSBasicLib.ADividedByB()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "ADividedByB"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1516,9 +1495,8 @@ class ADividedByB(object):
 class Minimum(object):
     def __init__(self):
         self.label = "Minimum"
-        self.cmdObj = MPEEMSBasicLib.Minimum()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "Minimum"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1560,9 +1538,8 @@ class Minimum(object):
 class Maximum(object):
     def __init__(self):
         self.label = "Maximum"
-        self.cmdObj = MPEEMSBasicLib.Maximum()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "Maximum"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1604,9 +1581,8 @@ class Maximum(object):
 class Mean(object):
     def __init__(self):
         self.label = "Mean"
-        self.cmdObj = MPEEMSBasicLib.Mean()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "Mean"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1648,9 +1624,8 @@ class Mean(object):
 class WeightedMean(object):
     def __init__(self):
         self.label = "Weighted Mean"
-        self.cmdObj = MPEEMSBasicLib.WeightedMean()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "WeightedMean"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1702,9 +1677,8 @@ class WeightedMean(object):
 class Normalize(object):
     def __init__(self):
         self.label = "Normalize"
-        self.cmdObj = MPEEMSBasicLib.Normalize()
-        self.cmd = self.cmdObj.FxnNm()
-        self.description = self.cmdObj.FxnShortDesc()
+        self.cmd = "Normalize"
+        self.description = ""
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
