@@ -25,17 +25,37 @@ def WriteLineToFile(fNm, line):
     return
 
 
-def AddMetadata(displayName, description, colorMap, reverseColorMap):
+def WriteCommandToFile(cmd, outFldNm, cmdArgs, cmdFile):
+    """ Function to write an EEMS Command to the Command File using mpilot """
+
+    from mpilot.program import Program
+
+    p = Program()
+    command = p.find_command_class(cmd)
+    p.add_command(command, outFldNm, cmdArgs)
+
+    with open(cmdFile, 'a') as f:
+        # Remove quotes for EEMS Online Compatibility.
+        s = p.to_string().replace('"', '') + "\n"
+        f.write(s)
+
+    return
+
+def CreateMetadataDict(displayName, description, colorMap, reverseColorMap):
+    metadata = {}
+
+    displayName = displayName.title().replace(" ", "&nbsp;")
+    metadata["DisplayName"] = displayName
+
     colorMap = colorMap.split(": ")[-1]
     if reverseColorMap:
         colorMap += "_r"
-    displayName = displayName.title().replace(" ", "&nbsp;")
+    metadata["ColorMap"] = colorMap
 
     if description and description != "":
         description = description.replace(" ", "&nbsp;")
-        metadata = "    Metadata = [\n       DisplayName: %s,\n       Description: %s,\n       ColorMap: %s\n    ]" % (displayName,  description, colorMap)
-    else:
-        metadata = "    Metadata = [\n       DisplayName: %s,\n       ColorMap: %s\n    ]" % (displayName, colorMap)
+        metadata["Description"] = description
+
     return metadata
 
 
@@ -276,11 +296,10 @@ class EEMSRead(object):
             arcpy.AddWarning(warning)
             dataType = 'Float'
 
-        eemsCmd = '%s = %s(\n    InFileName = %s,\n    InFieldName = %s,\n    DataType = %s,\n' % (outFldNm, self.cmd, inTblNm, inFldNm, dataType)
-        eemsCmd += AddMetadata(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
-        eemsCmd += "\n)"
+        metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
+        cmdArgs = OrderedDict([('InFileName', inTblNm), ('InFieldName', inFldNm), ('DataType', dataType), ('Metadata', metadataDict)])
+        WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
 
-        WriteLineToFile(cmdFile, eemsCmd)
         return
 
 
@@ -534,11 +553,10 @@ class CvtToFuzzy(object):
         outFldNm = parameters[4].value
         cmdFile = parameters[5].value
 
-        eemsCmd = "%s = %s(\n    InFieldName = %s,\n    FalseThreshold = %s,\n    TrueThreshold = %s,\n" % (outFldNm, self.cmd, inFldNm, falseThresh, trueThresh)
-        eemsCmd += AddMetadata(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
-        eemsCmd += "\n)"
+        metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
+        cmdArgs = OrderedDict([('InFieldName', inFldNm), ('FalseThreshold', falseThresh), ('TrueThreshold', trueThresh), ('Metadata', metadataDict)])
+        WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
 
-        WriteLineToFile(cmdFile, eemsCmd)
         return
 
 
@@ -972,11 +990,10 @@ class FuzzyUnion(object):
         outFldNm = parameters[2].value
         cmdFile = parameters[3].value
 
-        eemsCmd = '%s = %s(\n    InFieldNames = %s,\n' % (outFldNm, self.cmd, inFldNm)
-        eemsCmd += AddMetadata(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
-        eemsCmd += "\n)"
+        metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
+        cmdArgs = OrderedDict([('InFieldNames', inFldNm), ('Metadata', metadataDict)])
+        WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
 
-        WriteLineToFile(cmdFile, eemsCmd)
         return
 
 
