@@ -18,15 +18,8 @@ inputTableVarName = "%EEMS Input Table Path%"
 ########################################## General Functions ###########################################################
 
 
-def WriteLineToFile(fNm, line):
-    lOutFile = open(fNm, 'a')
-    lOutFile.write('%s\n' % line)
-    lOutFile.close()
-    return
-
-
 def WriteCommandToFile(cmd, outFldNm, cmdArgs, cmdFile):
-    """ Function to write an EEMS Command to the Command File using mpilot """
+    """ Function to write an EEMS Command to the Command File using mpilot. """
 
     from mpilot.program import Program
 
@@ -42,6 +35,7 @@ def WriteCommandToFile(cmd, outFldNm, cmdArgs, cmdFile):
     return
 
 def CreateMetadataDict(displayName, description, colorMap, reverseColorMap):
+    """ Function to create EEMS formatted metadata. Spaces are replaced with &nbsp; for EEMS Online compatibility."""
     metadata = {}
 
     displayName = displayName.title().replace(" ", "&nbsp;")
