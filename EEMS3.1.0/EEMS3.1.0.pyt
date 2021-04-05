@@ -598,7 +598,7 @@ class CvtToFuzzyZScore(object):
         cmdFile = parameters[5].value
 
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
-        cmdArgs = OrderedDict([('InFieldName', inFldNm), ('FalseThresholdZScore', falseThreshZScore), ('TrueThreshold', trueThreshZScore), ('Metadata', metadataDict)])
+        cmdArgs = OrderedDict([('InFieldName', inFldNm), ('FalseThresholdZScore', falseThreshZScore), ('TrueThresholdZScore', trueThreshZScore), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
 
         return
@@ -664,7 +664,7 @@ class CvtToFuzzyCat(object):
 class CvtToFuzzyCurve(object):
     def __init__(self):
         self.label = "Convert to Fuzzy Curve"
-        self.cmd = CvtToFuzzyCurve
+        self.cmd = "CvtToFuzzyCurve"
         self.description = ""
         self.canRunInBackground = runInBackground
 
@@ -869,7 +869,7 @@ class CvtFromFuzzy(object):
 class CvtToFuzzyMeanToMid(object):
     def __init__(self):
         self.label = "Convert to Fuzzy Mean to Mid"
-        self.cmd = "CvtToFuzzyMeanToMid"
+        self.cmd = "MeanToMid"
         self.description = ""
         self.canRunInBackground = runInBackground
 
@@ -1704,7 +1704,7 @@ class Normalize(object):
         cmdFile = parameters[5].value
 
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
-        cmdArgs = OrderedDict([('InFieldNames', inFldNm), ('StartVal', startVal), ('EndVal', endVal), ('Metadata', metadataDict)])
+        cmdArgs = OrderedDict([('InFieldName', inFldNm), ('StartVal', startVal), ('EndVal', endVal), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
 
         return
