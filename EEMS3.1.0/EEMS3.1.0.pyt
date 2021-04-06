@@ -29,6 +29,7 @@ def WriteCommandToFile(cmd, outFldNm, cmdArgs, cmdFile):
         f.write(s)
     return
 
+
 def CreateMetadataDict(displayName, description, colorMap, reverseColorMap):
     """ Function to create EEMS formatted metadata. Spaces are replaced with &nbsp; for EEMS Online compatibility."""
     metadata = {}
@@ -281,9 +282,9 @@ class EEMSRead(object):
         elif fieldType in ['Integer', 'SmallInteger']:
             dataType = 'Integer'
         else:
-            warning ='\nWarning!!! Input Fields should be of type integer or float. The %s field is of type %s.\nAn attempt will be made to coerce the values in this field to a float. This may cause problems if unsuccessful.\n' % (inFldNm, fieldType)
+            warning = "\nWarning!!! Input Fields should be of type integer or float. The %s field is of type %s.\nAn attempt will be made to coerce the values in this field to a float. This may cause problems if unsuccessful.\n" % (inFldNm, fieldType)
             arcpy.AddWarning(warning)
-            dataType = 'Float'
+            dataType = "Float"
 
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFileName', inTblNm), ('InFieldName', inFldNm), ('DataType', dataType), ('Metadata', metadataDict)])
@@ -323,16 +324,15 @@ class EEMSModelRun(object):
         outputReportingUnits = parameters[1].value
         cmdFileNm = parameters[3].value
 
-        messages.addMessage("\nCopying Input Reporting Units to Output Reporting Units...\n"
-                         "(Only Keeping OBJECTID and Shape fields)")
+        messages.addMessage("\nCopying Input Reporting Units to Output Reporting Units...\n(Only Keeping OBJECTID and Shape fields)")
 
         self.CopyInputRUToOutputRU(inputReportingUnits, outputReportingUnits)
 
-        messages.addMessage('\nCreating CSV file from the Input Reporting Units...')
+        messages.addMessage("\nCreating CSV file from the Input Reporting Units...")
         EEMSCSVFNm = self.CreateCSVFromInputRU(inputReportingUnits, messages)
 
         with open(cmdFileNm) as f:
-            messages.addMessage('\nConverting EEMS Command File to a String...')
+            messages.addMessage("\nConverting EEMS Command File to a String...")
             progStr = f.read()
             progStr = progStr.replace(inputReportingUnits, EEMSCSVFNm)
 
@@ -350,7 +350,7 @@ class EEMSModelRun(object):
             EEMSMPilotWrite = p.find_command_class('EEMSWrite')
             p.add_command(EEMSMPilotWrite, "Results", {'OutFileName': EEMSCSVFNm, 'OutFieldNames': EEMSOutFields})
 
-        messages.addMessage('\nRunning EEMS on the CSV file...')
+        messages.addMessage("\nRunning EEMS on the CSV file...")
         p.run()
 
         messages.addMessage("\nJoining CSV file to Output Reporting Units...")
