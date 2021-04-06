@@ -7,6 +7,7 @@ from collections import OrderedDict
 arcpy.CheckOutExtension("spatial")
 
 runInBackground = True
+version = "3.1.0"
 cmdFileVarName = "%EEMS Command File Path%"
 inputTableVarName = "%EEMS Input Table Path%"
 
@@ -161,7 +162,7 @@ def PrintEEMSHdr():
     arcpy.AddMessage('|         EEMS - Environmental Evaluation Modeling System          |')
     arcpy.AddMessage('|                                                                  |')
     arcpy.AddMessage('| Implementation for ArcGIS Model Builder                          |')
-    arcpy.AddMessage('| Version: 3.1.0 Alpha                                             |')
+    arcpy.AddMessage('| Version: ' + version + ' Alpha                                   |')
     arcpy.AddMessage('| Conservation Biology Institute | info@consbio.org                |')
     arcpy.AddMessage('|                                                                  |')
     arcpy.AddMessage('+------------------------------------------------------------------+')
@@ -173,8 +174,8 @@ def PrintEEMSHdr():
 
 class Toolbox(object):
     def __init__(self):
-        self.label = "EEMS3.00"
-        self.alias = "EEMS3.00"
+        self.label = "EEMS%s" % version
+        self.alias = "EEMS%s" % version
         self.tools = [EEMSModelInitialize, EEMSModelRun, EEMSRead,
                       CvtToFuzzy, CvtToFuzzyZScore, CvtToFuzzyCat, CvtToFuzzyCurve, CvtToFuzzyCurveZScore, CvtToBinary, CvtFromFuzzy, CvtToFuzzyMeanToMid,
                       FuzzyUnion, FuzzyWeightedUnion, FuzzySelectedUnion, FuzzyOr, FuzzyAnd, FuzzyXOr, FuzzyNot,
@@ -782,7 +783,7 @@ class CvtFromFuzzy(object):
 class CvtToFuzzyMeanToMid(object):
     def __init__(self):
         self.label = "Convert to Fuzzy Mean to Mid"
-        self.cmd = "MeanToMid"
+        self.cmd = "CvtToFuzzyMeanToMid"
         self.description = ""
         self.canRunInBackground = runInBackground
 
