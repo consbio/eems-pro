@@ -175,7 +175,7 @@ class Toolbox(object):
     def __init__(self):
         self.label = "EEMS3.00"
         self.alias = "EEMS3.00"
-        self.tools = [EEMSModelInitialize, EEMSModelRun, EEMSRead, EEMSModelLogicCheck,
+        self.tools = [EEMSModelInitialize, EEMSModelRun, EEMSRead,
                       CvtToFuzzy, CvtToFuzzyZScore, CvtToFuzzyCat, CvtToFuzzyCurve, CvtToFuzzyCurveZScore, CvtToBinary, CvtFromFuzzy, CvtToFuzzyMeanToMid,
                       FuzzyUnion, FuzzyWeightedUnion, FuzzySelectedUnion, FuzzyOr, FuzzyAnd, FuzzyXOr, FuzzyNot,
                       AMinusB, Sum, WeightedSum, Multiply, ADividedByB, Minimum, Maximum, Mean, WeightedMean, Normalize]
