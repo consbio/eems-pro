@@ -2,14 +2,9 @@ import arcpy
 import tempfile
 import os
 import csv
-import sys
 from collections import OrderedDict
 
 arcpy.CheckOutExtension("spatial")
-
-#toolboxDir = os.path.dirname(os.path.realpath(__file__))
-#sys.path.append(toolboxDir + os.sep + 'MPilot/MPilot_Python27')
-#from MPStdLibraries import MPEEMSCSVIO, MPEEMSFuzzyLogicLib, MPEEMSBasicLib
 
 runInBackground = True
 cmdFileVarName = "%EEMS Command File Path%"
@@ -31,7 +26,6 @@ def WriteCommandToFile(cmd, outFldNm, cmdArgs, cmdFile):
         # Remove quotes for EEMS Online Compatibility.
         s = p.to_string().replace('"', '') + "\n"
         f.write(s)
-
     return
 
 def CreateMetadataDict(displayName, description, colorMap, reverseColorMap):
@@ -49,7 +43,6 @@ def CreateMetadataDict(displayName, description, colorMap, reverseColorMap):
     if description and description != "":
         description = description.replace(" ", "&nbsp;")
         metadata["Description"] = description
-
     return metadata
 
 
@@ -121,6 +114,7 @@ def UpdateFieldNames(tool, inputField, validateInputField, resultsField, outputF
             displayName.value = outputFieldName.value.replace("_", " ")
 
 
+# List of available color maps from matplotlib.
 cmaps = OrderedDict()
 
 cmaps['Perceptually Uniform Sequential'] = [
@@ -167,7 +161,7 @@ def PrintEEMSHdr():
     arcpy.AddMessage('|         EEMS - Environmental Evaluation Modeling System          |')
     arcpy.AddMessage('|                                                                  |')
     arcpy.AddMessage('| Implementation for ArcGIS Model Builder                          |')
-    arcpy.AddMessage('| Version: 3.0 Alpha                                               |')
+    arcpy.AddMessage('| Version: 3.1.0 Alpha                                             |')
     arcpy.AddMessage('| Conservation Biology Institute | info@consbio.org                |')
     arcpy.AddMessage('|                                                                  |')
     arcpy.AddMessage('+------------------------------------------------------------------+')
@@ -293,7 +287,6 @@ class EEMSRead(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFileName', inTblNm), ('InFieldName', inFldNm), ('DataType', dataType), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -324,10 +317,6 @@ class EEMSModelRun(object):
     def execute(self, parameters, messages):
 
         from mpilot.program import Program
-
-        # path = os.getcwd()
-        # Path where script is running from is C:\WINDOWS\system32
-        # Which is why relative import of modules doesn't work.
 
         inputReportingUnits = parameters[2].value
         outputReportingUnits = parameters[1].value
@@ -370,9 +359,9 @@ class EEMSModelRun(object):
         return
 
     def CopyInputRUToOutputRU(self, inputReportingUnits, outputReportingUnits):
+        """ Copy the input reporting units to the output reporting units, but only keep the OBJECTID and SHAPE Fields. """
 
         inputFieldNames = [f.name for f in arcpy.ListFields(inputReportingUnits)]
-        # Copy the input feature class to the output feature class, but only keep the OBJECTID and SHAPE Fields.
 
         outputFieldList = "OBJECTID OBJECTID VISIBLE NONE; Shape Shape VISIBLE NONE"
         for inputFieldName in inputFieldNames:
@@ -389,12 +378,11 @@ class EEMSModelRun(object):
             in_features="inputReportingUnitsLayer",
             out_feature_class=outputReportingUnits
         )
-
         return
 
     def CreateCSVFromInputRU(self, inputReportingUnits, messages):
+        """ Create the CSV File that EEMS runs on from the Input Reporting Units. """
 
-        # Create the input CSV file.
         tmpDir = tempfile.mkdtemp()
         EEMSCSVFNm = tmpDir + os.sep + "EEMS_Output.csv"
 
@@ -420,38 +408,9 @@ class EEMSModelRun(object):
         messages.addMessage(EEMSCSVFNm)
         return EEMSCSVFNm
 
-    def CreateFramework(self, mpf):
-
-        return mpf.MPilotFramework([
-            ('.MPEEMSBasicLib', 'MPStdLibraries'),
-            ('.MPEEMSFuzzyLogicLib', 'MPStdLibraries'),
-            ('.MPEEMSGraphLib', 'MPStdLibraries'),
-            ('.MPEEMSCSVIO', 'MPStdLibraries'),
-            ('.MPEEMSStatsLib', 'MPStdLibraries'),
-        ])
-
-    def CvtCmdFileToString(self, mpp, inFNm, inputReportingUnits, EEMSCSVFNm):
-
-        with open(inFNm, 'r') as inF:
-            cmdStr = inF.read()
-
-            # Get a list of fields from the command string to add to the EEMS Write Command.
-            parsedCmds = mpp.ParseStringToCommands(cmdStr)
-            fieldsToWrite = ["CSVID"] + parsedCmds.keys()
-
-            outFields = "[" + ",".join(fieldsToWrite) + "]"
-            EEMSWriteCommand = "Results = EEMSWrite(\n    OutFileName=%s,\n    OutFieldNames = %s\n)\n" % (EEMSCSVFNm, outFields)
-            cmdStr += EEMSWriteCommand
-
-            # Add the line to the EEMS command file that will read and
-            # write the CSVID (match of object ID) to the result file
-            READCSVCommand = '%s = %s(\n    InFileName = %s,\n    InFieldName = %s\n)' % ("CSVID", "EEMSRead", EEMSCSVFNm, "CSVID")
-            cmdStr += READCSVCommand
-
-            cmdStr = cmdStr.replace(inputReportingUnits, EEMSCSVFNm)
-            return cmdStr
 
     def JoinCSVtoOutputRU(self, csv, outputRU, messages):
+        """ Join the CSV containing the EEMS Input & Output Fields to the Output Reporting Units """
 
         tmpOutTbl = "in_memory" + os.sep + 'Join_Table'
         arcpy.CopyRows_management(csv, tmpOutTbl)
@@ -496,7 +455,6 @@ class EEMSModelLogicCheck(object):
             messages.addMessage(cmdStr)
 
         messages.addMessage("\nModel logic check complete. All commands in this command file have been validated successfully.\n")
-
         return
 
 
@@ -522,7 +480,7 @@ class CvtToFuzzy(object):
 
         param1.value = -9999
         param2.value = 9999
-        param7.value ="High"
+        param7.value = "High"
         param5.value = cmdFileVarName
 
         mp = MetadataParameters()
@@ -530,7 +488,6 @@ class CvtToFuzzy(object):
         params[-1].value = True
         params[-2].value = mp.defaultColorRamp
         params[-2].filter.list = cmapsList
-
         return params
 
     def updateParameters(self, parameters):
@@ -550,7 +507,6 @@ class CvtToFuzzy(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldName', inFldNm), ('FalseThreshold', falseThresh), ('TrueThreshold', trueThresh), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -600,7 +556,6 @@ class CvtToFuzzyZScore(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldName', inFldNm), ('FalseThresholdZScore', falseThreshZScore), ('TrueThresholdZScore', trueThreshZScore), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -657,7 +612,6 @@ class CvtToFuzzyCat(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldName', inFldNm), ('RawValues', rawValues), ('FuzzyValues', fuzzyValues), ('DefaultFuzzyValue', defaultFuzzyValue), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -684,7 +638,6 @@ class CvtToFuzzyCurve(object):
         params[-1].value = True
         params[-2].value = mp.defaultColorRamp
         params[-2].filter.list = cmapsList
-
         return params
 
     def updateParameters(self, parameters):
@@ -712,7 +665,6 @@ class CvtToFuzzyCurve(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldName', inFldNm), ('RawValues', rawValues), ('FuzzyValues', fuzzyValues), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -765,7 +717,6 @@ class CvtToFuzzyCurveZScore(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldName', inFldNm), ('ZScoreValues', zScoreValues), ('FuzzyValues', fuzzyValues), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -814,7 +765,6 @@ class CvtToBinary(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldName', inFldNm), ('Threshold', threshold), ('Direction', direction), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -862,7 +812,6 @@ class CvtFromFuzzy(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldName', inFldNm), ('FalseThreshold', falseThresh), ('TrueThreshold', trueThresh), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
     
     
@@ -893,7 +842,6 @@ class CvtToFuzzyMeanToMid(object):
         params[-1].value = True
         params[-2].value = mp.defaultColorRamp
         params[-2].filter.list = cmapsList
-        
         return params
 
     def updateParameters(self, parameters):
@@ -920,7 +868,6 @@ class CvtToFuzzyMeanToMid(object):
             except:
                 # ALL OTHER ERRORS
                 parameters[1].setErrorMessage("Enter a list of five (no more, no less) fuzzy values separated by commas. For example: -1, -0.5, 0, 0.5, 1")
-                
         return
 
     def execute(self, parameters, messages):
@@ -934,7 +881,6 @@ class CvtToFuzzyMeanToMid(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldName', inFldNm), ('IgnoreZeros', ignoreZeros), ('FuzzyValues', fuzzyValues ), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -979,7 +925,6 @@ class FuzzyUnion(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldNames', inFldNm), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -1034,7 +979,6 @@ class FuzzyWeightedUnion(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldNames', inFldNm), ('Weights', weights), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -1081,7 +1025,6 @@ class FuzzySelectedUnion(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldNames', inFldNm), ('TruestOrFalsest', TorF), ('NumberToConsider', numberToConsider), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -1123,7 +1066,6 @@ class FuzzyOr(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldNames', inFldNm), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -1165,7 +1107,6 @@ class FuzzyAnd(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldNames', inFldNm), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -1208,7 +1149,6 @@ class FuzzyXOr(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldNames', inFldNm), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -1250,7 +1190,6 @@ class FuzzyNot(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldName', inFldNm), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -1297,7 +1236,6 @@ class AMinusB(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('A', aVal), ('B', bVal), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -1339,7 +1277,6 @@ class Sum(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldNames', inFldNm), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -1394,7 +1331,6 @@ class WeightedSum(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldNames', inFldNm), ('Weights', weights), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -1436,7 +1372,6 @@ class Multiply(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldNames', inFldNm), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -1480,7 +1415,6 @@ class ADividedByB(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('A', aVal), ('B', bVal), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -1522,7 +1456,6 @@ class Minimum(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldNames', inFldNm), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -1564,7 +1497,6 @@ class Maximum(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldNames', inFldNm), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -1606,7 +1538,6 @@ class Mean(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldNames', inFldNm), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -1658,7 +1589,6 @@ class WeightedMean(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldNames', inFldNm), ('Weights', weights), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
 
 
@@ -1706,5 +1636,4 @@ class Normalize(object):
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldName', inFldNm), ('StartVal', startVal), ('EndVal', endVal), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
-
         return
