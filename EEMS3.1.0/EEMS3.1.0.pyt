@@ -422,42 +422,6 @@ class EEMSModelRun(object):
         return
 
 
-class EEMSModelLogicCheck(object):
-    def __init__(self):
-        self.label = "EEMS Model Logic Check"
-        self.description = "Check for logical consistencies within the  EEMS command file."
-        self.canRunInBackground = runInBackground
-
-
-    def getParameterInfo(self):
-        param0 = arcpy.Parameter('EEMSCommandFile', 'EEMS Command File', 'Input', 'GPString', 'Required')
-
-        param0.value = cmdFileVarName
-        params = [param0]
-        return params
-
-    def updateParameters(self, parameters):
-        return
-
-    def updateMessages(self, parameters):
-        return
-
-    def execute(self, parameters, messages):
-
-        from MPCore import MPilotParse as mpp
-
-        cmdFileNm = parameters[0].value
-
-        with open(cmdFileNm, 'r') as inF:
-            cmdStr = inF.read()
-            # This function call will validate the command
-            mpp.ParseStringToCommands(cmdStr)
-            messages.addMessage(cmdStr)
-
-        messages.addMessage("\nModel logic check complete. All commands in this command file have been validated successfully.\n")
-        return
-
-
 ############################################  Convert to Fuzzy Tools ###################################################
 
 
