@@ -1,4 +1,4 @@
 __version__ = "3.1.0"
 
-# This version interfaces with CBI MPilot authored by Nik Molnar 
+# This version of EEMS interfaces with CBI MPilot version 1.x 
 
