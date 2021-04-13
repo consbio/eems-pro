@@ -1,4 +1,4 @@
-# EEMS3.1 Toolbox for ArcGIS Desktop
+# EEMS 3.1 for ArcGIS Desktop
 
 The Environmental Evaluation Modeling System (EEMS) is a fuzzy logic modelling system developed by CBI (Sheehan & Gough, 2016). EEMS 3.1 for ArcGIS consists of a set of script tools inside a Python Toolbox, which have been rewritten from the ground up to interface with MPilot 1.0.x (A plugin-based, environmental modeling framework developed by CBI).  EEMS 3.1 for ArcGIS includes a new set of data manipulation and conversion tools, interface changes, usability enhancements, and a new set of input fields which allow the user to associate metadata with each node in an EEMS Model (currently this includes Display Name, Description, and Color Map to use for rendering). This information can then be used by EEMS Online and other web applications to improve model interpretation and usability. 
 
