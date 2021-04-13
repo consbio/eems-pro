@@ -435,7 +435,7 @@ class CvtToFuzzy(object):
     def __init__(self):
         self.label = "Convert to Fuzzy"
         self.cmd = "CvtToFuzzy"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -484,7 +484,7 @@ class CvtToFuzzyZScore(object):
     def __init__(self):
         self.label = "Convert to Fuzzy Z Score"
         self.cmd = "CvtToFuzzyZScore"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -534,7 +534,7 @@ class CvtToFuzzyCat(object):
     def __init__(self):
         self.label = "Convert to Fuzzy Category"
         self.cmd = "CvtToFuzzyCat"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -589,7 +589,7 @@ class CvtToFuzzyCurve(object):
     def __init__(self):
         self.label = "Convert to Fuzzy Curve"
         self.cmd = "CvtToFuzzyCurve"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -642,7 +642,7 @@ class CvtToFuzzyCurveZScore(object):
     def __init__(self):
         self.label = "Convert to Fuzzy Curve Z Score"
         self.cmd = "CvtToFuzzyCurveZScore"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -694,7 +694,7 @@ class CvtToBinary(object):
     def __init__(self):
         self.label = "Convert to Binary"
         self.cmd = "CvtToBinary"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -742,7 +742,7 @@ class CvtFromFuzzy(object):
     def __init__(self):
         self.label = "Convert From Fuzzy"
         self.cmd = "CvtFromFuzzy"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -789,7 +789,7 @@ class CvtToFuzzyMeanToMid(object):
     def __init__(self):
         self.label = "Convert to Fuzzy Mean to Mid"
         self.cmd = "CvtToFuzzyMeanToMid"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -861,7 +861,7 @@ class FuzzyUnion(object):
     def __init__(self):
         self.label = "Fuzzy Union"
         self.cmd = "FuzzyUnion"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -902,7 +902,7 @@ class FuzzyWeightedUnion(object):
     def __init__(self):
         self.label = "Fuzzy Weighted Union"
         self.cmd = "FuzzyWeightedUnion"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -957,7 +957,7 @@ class FuzzySelectedUnion(object):
     def __init__(self):
         self.label = "Fuzzy Selected Union"
         self.cmd = "FuzzySelectedUnion"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1002,7 +1002,7 @@ class FuzzyOr(object):
     def __init__(self):
         self.label = "Fuzzy Or"
         self.cmd = "FuzzyOr"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1043,7 +1043,7 @@ class FuzzyAnd(object):
     def __init__(self):
         self.label = "Fuzzy And"
         self.cmd = "FuzzyAnd"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1085,7 +1085,7 @@ class FuzzyXOr(object):
     def __init__(self):
         self.label = "Fuzzy XOr"
         self.cmd = "FuzzyXOr"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1126,7 +1126,7 @@ class FuzzyNot(object):
     def __init__(self):
         self.label = "Fuzzy Not"
         self.cmd = "FuzzyNot"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1170,7 +1170,7 @@ class AMinusB(object):
     def __init__(self):
         self.label = "X Minus Y"
         self.cmd = "AMinusB"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1213,7 +1213,7 @@ class Sum(object):
     def __init__(self):
         self.label = "Sum"
         self.cmd = "Sum"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1254,7 +1254,7 @@ class WeightedSum(object):
     def __init__(self):
         self.label = "Weighted Sum"
         self.cmd = "WeightedSum"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1308,7 +1308,7 @@ class Multiply(object):
     def __init__(self):
         self.label = "Multiply"
         self.cmd = "Multiply"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1349,7 +1349,7 @@ class ADividedByB(object):
     def __init__(self):
         self.label = "X Divided By Y"
         self.cmd = "ADividedByB"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1392,7 +1392,7 @@ class Minimum(object):
     def __init__(self):
         self.label = "Minimum"
         self.cmd = "Minimum"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1433,7 +1433,7 @@ class Maximum(object):
     def __init__(self):
         self.label = "Maximum"
         self.cmd = "Maximum"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1474,7 +1474,7 @@ class Mean(object):
     def __init__(self):
         self.label = "Mean"
         self.cmd = "Mean"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1515,7 +1515,7 @@ class WeightedMean(object):
     def __init__(self):
         self.label = "Weighted Mean"
         self.cmd = "WeightedMean"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -1566,7 +1566,7 @@ class Normalize(object):
     def __init__(self):
         self.label = "Normalize"
         self.cmd = "Normalize"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
