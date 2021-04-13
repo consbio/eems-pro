@@ -1,7 +1,7 @@
 Archive/
 EEMS3.00_Tutorial_Data/
 mpilot
-/*.swp
+*.swp
 *.pyc
 .idea/*
 *.xml
