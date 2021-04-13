@@ -3,6 +3,9 @@ import tempfile
 import os
 import csv
 from collections import OrderedDict
+from mpilot.program import Program
+
+get_mpilot_info_p = Program()
 
 runInBackground = True
 version = "3.1.0"
@@ -15,9 +18,7 @@ inputTableVarName = "%EEMS Input Table Path%"
 def WriteCommandToFile(cmd, outFldNm, cmdArgs, cmdFile):
     """ Function to write an EEMS Command to the Command File using mpilot. """
 
-    from mpilot.program import Program
-
-    p = Program()
+    p = Program()  # Create a program each time a command is written to avoid duplicate command writes.
     command = p.find_command_class(cmd)
     p.add_command(command, outFldNm, cmdArgs)
 
@@ -244,7 +245,7 @@ class EEMSRead(object):
     def __init__(self):
         self.label = "EEMS Read"
         self.cmd = "EEMSRead"
-        self.description = ""
+        self.description = get_mpilot_info_p.find_command_class(self.cmd).__doc__
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -323,7 +324,6 @@ class EEMSModelRun(object):
 
     def execute(self, parameters, messages):
 
-        from mpilot.program import Program
 
         inputReportingUnits = parameters[2].value
         outputReportingUnits = parameters[1].value
