@@ -2,6 +2,7 @@ import arcpy
 import tempfile
 import os
 import csv
+import numpy
 from collections import OrderedDict
 from mpilot.program import Program
 
@@ -440,28 +441,68 @@ class CvtToFuzzy(object):
 
     def getParameterInfo(self):
         param0 = arcpy.Parameter('InputField', 'Input Field', 'Input', 'GPType', 'Required')
-        param1 = arcpy.Parameter('FalseThreshold', 'False Threshold', 'Input', 'GPDouble', 'Required')
-        param2 = arcpy.Parameter('TrueThreshold', 'True Threshold', 'Input', 'GPDouble', 'Required')
-        param3 = arcpy.Parameter('ResultsField', 'Results Field', 'Input', 'GPString', 'Required')
-        param4 = arcpy.Parameter('OutputFieldName', 'Output Field Name', 'Output', 'GPString', 'Derived')
-        param5 = arcpy.Parameter('EEMSCommandFile', 'EEMS Command File', 'Input', 'GPString', 'Required')
-        param6 = arcpy.Parameter('ValidateInputField', 'Validate Input Field', 'Input', 'GPString', 'Derived')
-        param7 = arcpy.Parameter('ValidateDirection', 'Validate Direction', 'Input', 'GPString', 'Derived')
+        param1 = arcpy.Parameter('ThresholdSettingMethod', 'Threshold Setting Method', 'Input', 'GPString', 'Optional')
+        param2 = arcpy.Parameter('FalseThreshold', 'False Threshold', 'Input', 'GPDouble', 'Required')
+        param3 = arcpy.Parameter('TrueThreshold', 'True Threshold', 'Input', 'GPDouble', 'Required')
+        param4 = arcpy.Parameter('ResultsField', 'Results Field', 'Input', 'GPString', 'Required')
+        param5 = arcpy.Parameter('OutputFieldName', 'Output Field Name', 'Output', 'GPString', 'Derived')
+        param6 = arcpy.Parameter('EEMSCommandFile', 'EEMS Command File', 'Input', 'GPString', 'Required')
+        param7 = arcpy.Parameter('ValidateInputField', 'Validate Input Field', 'Input', 'GPString', 'Derived')
+        param8 = arcpy.Parameter('ValidateDirection', 'Validate Direction', 'Input', 'GPString', 'Derived')
 
-        param1.value = -9999
-        param2.value = 9999
-        param7.value = "High"
-        param5.value = cmdFileVarName
+
+        param1.filter.list = ['Use custom values specified below',
+                              'Min/Max (True Threshold > False Threshold)',
+                              '1.0 Std Dev (True Threshold > False Threshold)', '1.5 Std Dev (True Threshold > False Threshold)', '2.0 Std Dev (True Threshold > False Threshold)','2.5 Std Dev (True Threshold > False Threshold)', '3.0 Std Dev (True Threshold > False Threshold)', '3.5 Std Dev (True Threshold > False Threshold)', '4.0 Std Dev (True Threshold > False Threshold)',
+                              'Min/Max (False Threshold > True Threshold)',
+                              '1.0 Std Dev (False Threshold > True Threshold)', '1.5 Std Dev (False Threshold > True Threshold)', '2.0 Std Dev (False Threshold > True Threshold)','2.5 Std Dev (False Threshold > True Threshold)', '3.0 Std Dev (False Threshold > True Threshold)', '3.5 Std Dev (False Threshold > True Threshold)', '4.0 Std Dev (False Threshold > True Threshold)',
+                              ]
+
+        param1.value = 'Use custom values specified below'
+        param8.value = "High"
+        param6.value = cmdFileVarName
 
         mp = MetadataParameters()
-        params = [param0, param1, param2, param3, param4, param5, param6, param7] + mp.getParamList()
+        params = [param0, param1, param2, param3, param4, param5, param6, param7, param8] + mp.getParamList()
         params[-1].value = True
         params[-2].value = mp.defaultColorRamp
         params[-2].filter.list = cmapsList
         return params
 
     def updateParameters(self, parameters):
-        UpdateFieldNames(tool=self.cmd, inputField=parameters[0], validateInputField=parameters[6], resultsField=parameters[3], outputFieldName=parameters[4], displayName=parameters[-4], validateDirection=parameters[7], falseThreshold=parameters[1], trueThreshold=parameters[2])
+        """ Set the True and False thresholds based on the user defined threshold setting method. """
+        if (parameters[0].altered or parameters[1].altered) and parameters[1].value != "Use custom values specified below":
+            field_values = []
+            field_name = parameters[0].value
+            with arcpy.da.SearchCursor(inputTableVarName, field_name) as sc:
+                for row in sc:
+                    field_values.append(row[0])
+                min_val = numpy.min(field_values)
+                max_val = numpy.max(field_values)
+                mean_val = numpy.mean(field_values)
+                std = numpy.std(field_values)
+
+                threshold_setting_method = parameters[1].value
+
+                if threshold_setting_method == "Min/Max (True Threshold > False Threshold)":
+                    parameters[2].value = min_val
+                    parameters[3].value = max_val
+                elif threshold_setting_method == "Min/Max (False Threshold > True Threshold)":
+                    parameters[2].value = max_val
+                    parameters[3].value = min_val
+                else:
+                    num_std_dev = float(threshold_setting_method.split(" ")[0])
+                    if "True Threshold > False Threshold" in threshold_setting_method:
+                        parameters[2].value = round((mean_val - (num_std_dev * std)), 8)
+                        parameters[3].value = round((mean_val + (num_std_dev * std)), 8)
+
+                    elif "False Threshold > True Threshold" in threshold_setting_method:
+                        parameters[2].value = round((mean_val + (num_std_dev * std)), 8)
+                        parameters[3].value = round((mean_val - (num_std_dev * std)), 8)
+
+        if parameters[2].value is not None and parameters[3].value is not None:
+            UpdateFieldNames(tool=self.cmd, inputField=parameters[0], validateInputField=parameters[7], resultsField=parameters[4], outputFieldName=parameters[5], displayName=parameters[-4], validateDirection=parameters[8], falseThreshold=parameters[2], trueThreshold=parameters[3])
+
         return
 
     def updateMessages(self, parameters):
@@ -469,10 +510,10 @@ class CvtToFuzzy(object):
 
     def execute(self, parameters, messages):
         inFldNm = parameters[0].value
-        falseThresh = parameters[1].value
-        trueThresh = parameters[2].value
-        outFldNm = parameters[4].value
-        cmdFile = parameters[5].value
+        falseThresh = parameters[2].value
+        trueThresh = parameters[3].value
+        outFldNm = parameters[5].value
+        cmdFile = parameters[6].value
 
         metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
         cmdArgs = OrderedDict([('InFieldName', inFldNm), ('FalseThreshold', falseThresh), ('TrueThreshold', trueThresh), ('Metadata', metadataDict)])
