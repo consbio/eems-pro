@@ -453,9 +453,9 @@ class CvtToFuzzy(object):
 
         param1.filter.list = ['Use custom values specified below',
                               'Min/Max (True Threshold > False Threshold)',
-                              '1.0 Std Dev (True Threshold > False Threshold)', '1.5 Std Dev (True Threshold > False Threshold)', '2.0 Std Dev (True Threshold > False Threshold)','2.5 Std Dev (True Threshold > False Threshold)', '3.0 Std Dev (True Threshold > False Threshold)', '3.5 Std Dev (True Threshold > False Threshold)', '4.0 Std Dev (True Threshold > False Threshold)',
+                              '0.5 Std Dev (True Threshold > False Threshold)', '1.0 Std Dev (True Threshold > False Threshold)', '1.5 Std Dev (True Threshold > False Threshold)', '2.0 Std Dev (True Threshold > False Threshold)','2.5 Std Dev (True Threshold > False Threshold)', '3.0 Std Dev (True Threshold > False Threshold)', '3.5 Std Dev (True Threshold > False Threshold)', '4.0 Std Dev (True Threshold > False Threshold)',
                               'Min/Max (False Threshold > True Threshold)',
-                              '1.0 Std Dev (False Threshold > True Threshold)', '1.5 Std Dev (False Threshold > True Threshold)', '2.0 Std Dev (False Threshold > True Threshold)','2.5 Std Dev (False Threshold > True Threshold)', '3.0 Std Dev (False Threshold > True Threshold)', '3.5 Std Dev (False Threshold > True Threshold)', '4.0 Std Dev (False Threshold > True Threshold)',
+                              '0.5 Std Dev (False Threshold > True Threshold)', '1.0 Std Dev (False Threshold > True Threshold)', '1.5 Std Dev (False Threshold > True Threshold)', '2.0 Std Dev (False Threshold > True Threshold)','2.5 Std Dev (False Threshold > True Threshold)', '3.0 Std Dev (False Threshold > True Threshold)', '3.5 Std Dev (False Threshold > True Threshold)', '4.0 Std Dev (False Threshold > True Threshold)',
                               ]
 
         param1.value = 'Use custom values specified below'
