@@ -450,14 +450,6 @@ class CvtToFuzzy(object):
         param7 = arcpy.Parameter('ValidateInputField', 'Validate Input Field', 'Input', 'GPString', 'Derived')
         param8 = arcpy.Parameter('ValidateDirection', 'Validate Direction', 'Input', 'GPString', 'Derived')
 
-
-        param1.filter.list = ['Use custom values specified below',
-                              'Min/Max (True Threshold > False Threshold)',
-                              '0.5 Std Dev (True Threshold > False Threshold)', '1.0 Std Dev (True Threshold > False Threshold)', '1.5 Std Dev (True Threshold > False Threshold)', '2.0 Std Dev (True Threshold > False Threshold)','2.5 Std Dev (True Threshold > False Threshold)', '3.0 Std Dev (True Threshold > False Threshold)', '3.5 Std Dev (True Threshold > False Threshold)', '4.0 Std Dev (True Threshold > False Threshold)',
-                              'Min/Max (False Threshold > True Threshold)',
-                              '0.5 Std Dev (False Threshold > True Threshold)', '1.0 Std Dev (False Threshold > True Threshold)', '1.5 Std Dev (False Threshold > True Threshold)', '2.0 Std Dev (False Threshold > True Threshold)','2.5 Std Dev (False Threshold > True Threshold)', '3.0 Std Dev (False Threshold > True Threshold)', '3.5 Std Dev (False Threshold > True Threshold)', '4.0 Std Dev (False Threshold > True Threshold)',
-                              ]
-
         param1.value = 'Use custom values specified below'
         param8.value = "High"
         param6.value = cmdFileVarName
@@ -471,6 +463,17 @@ class CvtToFuzzy(object):
 
     def updateParameters(self, parameters):
         """ Set the True and False thresholds based on the user defined threshold setting method. """
+
+        if parameters[0].value not in [field.name for field in arcpy.ListFields(inputTableVarName)]:
+            parameters[1].filter.list = ['Use custom values specified below']
+        else:
+            parameters[1].filter.list = ['Use custom values specified below',
+                              'Min/Max (True Threshold > False Threshold)',
+                              '0.5 Std Dev (True Threshold > False Threshold)', '1.0 Std Dev (True Threshold > False Threshold)', '1.5 Std Dev (True Threshold > False Threshold)', '2.0 Std Dev (True Threshold > False Threshold)','2.5 Std Dev (True Threshold > False Threshold)', '3.0 Std Dev (True Threshold > False Threshold)', '3.5 Std Dev (True Threshold > False Threshold)', '4.0 Std Dev (True Threshold > False Threshold)',
+                              'Min/Max (False Threshold > True Threshold)',
+                              '0.5 Std Dev (False Threshold > True Threshold)', '1.0 Std Dev (False Threshold > True Threshold)', '1.5 Std Dev (False Threshold > True Threshold)', '2.0 Std Dev (False Threshold > True Threshold)','2.5 Std Dev (False Threshold > True Threshold)', '3.0 Std Dev (False Threshold > True Threshold)', '3.5 Std Dev (False Threshold > True Threshold)', '4.0 Std Dev (False Threshold > True Threshold)',
+                              ]
+
         if parameters[1].value == "Use custom values specified below":
             parameters[2].enabled = True
             parameters[3].enabled = True
