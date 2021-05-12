@@ -513,7 +513,6 @@ class CvtToFuzzy(object):
         if parameters[2].value is not None and parameters[3].value is not None:
             UpdateFieldNames(tool=self.cmd, inputField=parameters[0], validateInputField=parameters[7], resultsField=parameters[4], outputFieldName=parameters[5], displayName=parameters[-4], validateDirection=parameters[8], falseThreshold=parameters[2], trueThreshold=parameters[3])
 
-
         return
 
     def updateMessages(self, parameters):
@@ -549,8 +548,8 @@ class CvtToFuzzyZScore(object):
         param6 = arcpy.Parameter('ValidateInputField', 'Validate Input Field', 'Input', 'GPString', 'Derived')
         param7 = arcpy.Parameter('ValidateDirection', 'Validate Direction', 'Input', 'GPString', 'Derived')
 
-        param1.value = -9999
-        param2.value = 9999
+        param1.value = -1
+        param2.value = 1
         param7.value = "High"
         param5.value = cmdFileVarName
 
