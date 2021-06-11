@@ -9,7 +9,7 @@ from mpilot.program import Program
 get_mpilot_info_p = Program()
 
 runInBackground = True
-version = "3.1.0"
+version = "3.1.0a1"
 cmdFileVarName = "%EEMS Command File Path%"
 inputTableVarName = "%EEMS Input Table Path%"
 
@@ -34,17 +34,41 @@ def CreateMetadataDict(displayName, description, colorMap, reverseColorMap):
     """ Function to create EEMS formatted metadata. Spaces are replaced with &nbsp; for EEMS Online compatibility."""
     metadata = {}
 
-    displayName = displayName.title().replace(" ", "&nbsp;")
-    metadata["DisplayName"] = displayName
+    # The section below replaces special characters with HTML entities.
+    # Certain characters will cause mpilot & EEMS Online uploads to fail (due to limitations present in MPilotParse.py)
+    # List of problematic special characters: #:,=()[]
+    # In mpilot the DisplayName and Descriptions can be quoted (which also works with EEMS Online),
+    # but, even quoted, some characters will still cause EEMS Online to fail: =()#[
+    # Quotes added by mpilot also need to be removed from the entire command string because EEMS Online won't accept
+    # quotes around other arguments (e.g., outputName, DataType, etc.)
+    # The DisplayName gets decoded back to ASCII for the tree diagram in spactree.js for proper display in each node.
+    # HTML Entities List: https://unicode-table.com/en/html-entities
+    char_to_replace = {" ": "&nbsp;",
+                       "#": "&num;",
+                       ":": "&colon;",
+                       ",": "&sbquo;",
+                       "=": "&equals;",
+                       "(": "&lpar;",
+                       ")": "&rpar;",
+                       "[": "&lbrack;",
+                       "]": "&rbrack;",
+                       }
+
+    if displayName and displayName != "":
+        for key, value in char_to_replace.items():
+            displayName = displayName.replace(key, value)
+        metadata["DisplayName"] = displayName
+
+    if description and description != "":
+        for key, value in char_to_replace.items():
+               description = description.replace(key, value)
+        metadata["Description"] = description
 
     colorMap = colorMap.split(": ")[-1]
     if reverseColorMap:
         colorMap += "_r"
     metadata["ColorMap"] = colorMap
 
-    if description and description != "":
-        description = description.replace(" ", "&nbsp;")
-        metadata["Description"] = description
     return metadata
 
 
@@ -72,7 +96,7 @@ def UpdateFieldNames(tool, inputField, validateInputField, resultsField, outputF
                 baseOutputName = validateDirection.value + "_" + inputField.value
                 resultsField.value = baseOutputName + "_Fz"
                 outputFieldName.value = str(resultsField.value)
-                displayName.value = outputFieldName.value.replace("_", " ")
+                displayName.value = outputFieldName.value.title().replace("_", " ")
 
                 # Prevents resetting of resultsFieldName and displayName on "Run Entire Model"
                 validateInputField.value = str(inputField.value)
@@ -84,7 +108,7 @@ def UpdateFieldNames(tool, inputField, validateInputField, resultsField, outputF
                 baseOutputName = inputField.value
                 resultsField.value = baseOutputName + "_Fz"
                 outputFieldName.value = str(resultsField.value)
-                displayName.value = outputFieldName.value.replace("_", " ")
+                displayName.value = outputFieldName.value.title().replace("_", " ")
 
                 # Prevents resetting of resultsFieldName and displayName on "Run Entire Model"
                 validateInputField.value = str(inputField.value)
@@ -94,7 +118,7 @@ def UpdateFieldNames(tool, inputField, validateInputField, resultsField, outputF
                 baseOutputName = inputField.value
                 resultsField.value = baseOutputName + "_Binary"
                 outputFieldName.value = str(resultsField.value)
-                displayName.value = outputFieldName.value.replace("_", " ")
+                displayName.value = outputFieldName.value.title().replace("_", " ")
 
                 # Prevents resetting of resultsFieldName and displayName on "Run Entire Model"
                 validateInputField.value = str(inputField.value)
@@ -104,7 +128,7 @@ def UpdateFieldNames(tool, inputField, validateInputField, resultsField, outputF
                 baseOutputName = inputField.value
                 resultsField.value = baseOutputName.replace("High_", "").replace("Low_", "").replace("_Fz", "_NonFz")
                 outputFieldName.value = str(resultsField.value)
-                displayName.value = outputFieldName.value.replace("_", " ")
+                displayName.value = outputFieldName.value.title().replace("_", " ")
 
                 # Prevents resetting of resultsFieldName and displayName on "Run Entire Model"
                 validateInputField.value = str(inputField.value)
@@ -113,7 +137,7 @@ def UpdateFieldNames(tool, inputField, validateInputField, resultsField, outputF
         # For all conversion tools, when the user manually changes the resultsField, change the outputFieldName (bubble) and the displayName (Metadata).
         if outputFieldName.value != resultsField.value:
             outputFieldName.value = str(resultsField.value)
-            displayName.value = outputFieldName.value.replace("_", " ")
+            displayName.value = outputFieldName.value.title().replace("_", " ")
 
 
 # List of available color maps from matplotlib.
