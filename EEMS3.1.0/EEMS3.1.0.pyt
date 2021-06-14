@@ -9,7 +9,7 @@ from mpilot.program import Program
 get_mpilot_info_p = Program()
 
 runInBackground = True
-version = "3.1.0a1"
+version = "3.1.0a2"
 cmdFileVarName = "%EEMS Command File Path%"
 inputTableVarName = "%EEMS Input Table Path%"
 

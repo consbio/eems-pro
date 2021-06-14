@@ -5,3 +5,7 @@ __version__ = "3.1.0"
 __version__ = "3.1.0a1"
 
 # Encode special characters in the DisplayName and Description to HTML Entities. Decode back to ASCII in EEMS Online.  
+
+__version__ = "3.1.0a2"
+
+# Encode single quotes.  
