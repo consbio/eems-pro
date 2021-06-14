@@ -52,6 +52,7 @@ def CreateMetadataDict(displayName, description, colorMap, reverseColorMap):
                        ")": "&rpar;",
                        "[": "&lbrack;",
                        "]": "&rbrack;",
+                       "'": "&rsquo;",
                        }
 
     if displayName and displayName != "":
