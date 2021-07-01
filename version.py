@@ -8,4 +8,8 @@ __version__ = "3.1.0a1"
 
 __version__ = "3.1.0a2"
 
-# Encode single quotes.  
+# Encode single quotes.
+
+__version__ = "3.1.0a3"
+
+# Change IgnoreZeros parameter from TRUE/FALSE to True/False
