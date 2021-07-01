@@ -878,13 +878,13 @@ class CvtToFuzzyMeanToMid(object):
         param6 = arcpy.Parameter('ValidateInputField', 'Validate Input Field', 'Input', 'GPString', 'Derived')
 
         param5.value = cmdFileVarName
-        param2.filter.list = ["TRUE", "FALSE"]
+        param2.filter.list = ["True", "False"]
 
         mp = MetadataParameters()
         params = [param0, param1, param2, param3, param4, param5, param6] + mp.getParamList()
 
         params[1].value = "-1, -0.5, 0, 0.5, 1"
-        params[2].value = "TRUE" 
+        params[2].value = "False"
         params[-1].value = True
         params[-2].value = mp.defaultColorRamp
         params[-2].filter.list = cmapsList
