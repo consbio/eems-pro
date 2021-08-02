@@ -508,7 +508,8 @@ class CvtToFuzzy(object):
             field_name = parameters[0].value
             with arcpy.da.SearchCursor(inputTableVarName, field_name) as sc:
                 for row in sc:
-                    field_values.append(row[0])
+                    if row[0] is not None:
+                        field_values.append(row[0])
                 min_val = numpy.min(field_values)
                 max_val = numpy.max(field_values)
                 mean_val = numpy.mean(field_values)

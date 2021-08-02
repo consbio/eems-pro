@@ -13,3 +13,7 @@ __version__ = "3.1.0a2"
 __version__ = "3.1.0a3"
 
 # Change IgnoreZeros parameter from TRUE/FALSE to True/False
+
+__version__ = "3.1.0a4"
+
+# Skip NULL values when setting thresholds using a statistical method.   
