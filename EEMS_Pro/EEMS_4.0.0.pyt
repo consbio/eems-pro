@@ -174,7 +174,7 @@ cmaps['Miscellaneous'] = [
             'gist_ncar']
 
 cmapsList = []
-for k, v in cmaps.iteritems():
+for k, v in cmaps.items():
     for c in v:
         cmapDislpayName = k + ": " + c
         cmapsList.append(cmapDislpayName)

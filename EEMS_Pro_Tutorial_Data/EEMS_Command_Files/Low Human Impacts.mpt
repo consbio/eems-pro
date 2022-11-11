@@ -1,0 +1,147 @@
+Roads_Density = EEMSRead(
+    InFileName = E:\CBI\CBI_Tools\EEMS_3.00_Test_ArcGIS10.6\EEMS3.0_Tutorial_Data\2_EEMS_Input.gdb\Input_Reporting_Units,
+    InFieldName = Roads_Density,
+    DataType = Float,
+    Metadata = [
+       DisplayName: Roads&nbsp;Density,
+       Description: test&nbsp;desc,
+       ColorMap: BuGn_r
+    ]
+)
+Low_Roads_Density_Fz = CvtToFuzzy(
+    InFieldName = Roads_Density,
+    FalseThreshold = 3.0,
+    TrueThreshold = 0.0,
+    Metadata = [
+       DisplayName: Low&nbsp;Roads&nbsp;Density,
+       Description: Idnetifies&nbsp;areas&nbsp;with&nbsp;low&nbsp;road&nbsp;densities&nbsp;based&nbsp;on&nbsp;TIGER&nbsp;2019,
+       ColorMap: RdYlBu_r
+    ]
+)
+Agriculture_Density = EEMSRead(
+    InFileName = E:\CBI\CBI_Tools\EEMS_3.00_Test_ArcGIS10.6\EEMS3.0_Tutorial_Data\2_EEMS_Input.gdb\Input_Reporting_Units,
+    InFieldName = Agriculture_Density,
+    DataType = Float,
+    Metadata = [
+       DisplayName: Agriculture&nbsp;Density,
+       Description: test&nbsp;desc&nbsp;2,
+       ColorMap: binary
+    ]
+)
+Low_Agriculture_Density_Fz = CvtToFuzzy(
+    InFieldName = Agriculture_Density,
+    FalseThreshold = 50.0,
+    TrueThreshold = 0.0,
+    Metadata = [
+       DisplayName: Low&nbsp;Agriculture&nbsp;Density&nbsp;Fz,
+       ColorMap: RdYlBu_r
+    ]
+)
+Low_Human_Impacts_Fz = FuzzyWeightedUnion(
+    InFieldNames = [Low_Roads_Density_Fz,Low_Agriculture_Density_Fz],
+    Weights = [1.0,1.0],
+    Metadata = [
+       DisplayName: Low&nbsp;Human&nbsp;Impacts&nbsp;Fz,
+       ColorMap: RdYlBu_r
+    ]
+)
+test_or = FuzzyOr(
+    InFieldNames = [Low_Roads_Density_Fz,Low_Agriculture_Density_Fz],
+    Metadata = [
+       DisplayName: Test&nbsp;Or,
+       ColorMap: RdYlBu_r
+    ]
+)
+union = FuzzyWeightedUnion(
+    InFieldNames = [Low_Roads_Density_Fz,Low_Agriculture_Density_Fz],
+    Weights = [1.0,2.0],
+    Metadata = [
+       DisplayName: Union,
+       ColorMap: RdYlBu_r
+    ]
+)
+or = FuzzyOr(
+    InFieldNames = [Low_Roads_Density_Fz,Low_Agriculture_Density_Fz],
+    Metadata = [
+       DisplayName: Or,
+       ColorMap: RdYlBu_r
+    ]
+)
+or = FuzzyOr(
+    InFieldNames = [Low_Roads_Density_Fz,Low_Agriculture_Density_Fz],
+    Metadata = [
+       DisplayName: Or,
+       ColorMap: RdYlBu_r
+    ]
+)
+union = FuzzyWeightedUnion(
+    InFieldNames = [Low_Roads_Density_Fz,Low_Agriculture_Density_Fz],
+    Weights = [0.3,0.7],
+    Metadata = [
+       DisplayName: Union,
+       ColorMap: RdYlBu_r
+    ]
+)
+union = FuzzyWeightedUnion(
+    InFieldNames = [Low_Roads_Density_Fz,Low_Agriculture_Density_Fz],
+    Weights = [0.2,0.6],
+    Metadata = [
+       DisplayName: Union,
+       ColorMap: RdYlBu_r
+    ]
+)
+or = FuzzyOr(
+    InFieldNames = [Low_Roads_Density_Fz,Low_Agriculture_Density_Fz],
+    Metadata = [
+       DisplayName: Or,
+       ColorMap: RdYlBu_r
+    ]
+)
+fwu = FuzzyWeightedUnion(
+    InFieldNames = [Low_Roads_Density_Fz,Low_Agriculture_Density_Fz],
+    Weights = [0.2,0.8],
+    Metadata = [
+       DisplayName: Fwu,
+       ColorMap: RdYlBu_r
+    ]
+)
+fwu = FuzzyWeightedUnion(
+    InFieldNames = [Low_Roads_Density_Fz,Low_Agriculture_Density_Fz],
+    Weights = [0.2,0.8],
+    Metadata = [
+       DisplayName: Fwu,
+       ColorMap: RdYlBu_r
+    ]
+)
+fwu = FuzzyWeightedUnion(
+    InFieldNames = [Low_Roads_Density_Fz,Low_Agriculture_Density_Fz],
+    Weights = [0.1,0.8],
+    Metadata = [
+       DisplayName: Fwu,
+       ColorMap: RdYlBu_r
+    ]
+)
+test = FuzzyOr(
+    InFieldNames = [Low_Roads_Density_Fz,Low_Agriculture_Density_Fz],
+    Metadata = [
+       DisplayName: Test,
+       ColorMap: RdYlBu_r
+    ]
+)
+test = FuzzyWeightedUnion(
+    InFieldNames = [Low_Roads_Density_Fz,Low_Agriculture_Density_Fz],
+    Weights = [0.0,0.0],
+    Metadata = [
+       DisplayName: Test,
+       ColorMap: RdYlBu_r
+    ]
+)
+High_ Species_Rarity_Fz asdfasdf = FuzzyWeightedUnion(
+    InFieldNames = [Low_Roads_Density_Fz,Low_Agriculture_Density_Fz],
+    Weights = [0.2,0.3],
+    Metadata = [
+       DisplayName: High&nbsp;&nbsp;Species&nbsp;Rarity&nbsp;Fz&nbsp;Asdfasdf,
+       Description: asdfgasdf&nbsp;234123541&nbsp;235&nbsp;134225&nbsp;5431&nbsp;524365&nbsp;t,
+       ColorMap: RdYlBu_r
+    ]
+)
