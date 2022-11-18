@@ -3,10 +3,15 @@ import tempfile
 import os
 import csv
 import numpy
+import sys
 from collections import OrderedDict
 from mpilot.program import Program
 import pandas as pd
 from arcgis.features import GeoAccessor, GeoSeriesAccessor
+
+eems_tbx_dir = os.path.dirname(os.path.realpath(__file__))
+parent_dir = os.path.dirname(eems_tbx_dir)
+sys.path.append(parent_dir)
 
 get_mpilot_info_p = Program()
 
@@ -386,7 +391,7 @@ class EEMSModelRun(object):
         messages.addMessage("\nRunning EEMS on the CSV file...")
         p.run()
 
-        messages.addMessage("\nJoining CSV file to Output Reporting Units using Pandas...")
+        messages.addMessage("\nJoining CSV file to Output Reporting Units...")
         self.JoinCSVtoOutputRU(EEMSCSVFNm, inputReportingUnits, outputReportingUnits, messages)
 
         messages.addMessage("\nSuccess\n")
