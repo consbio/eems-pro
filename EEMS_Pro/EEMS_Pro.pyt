@@ -5,6 +5,8 @@ import csv
 import numpy
 from collections import OrderedDict
 from mpilot.program import Program
+import pandas as pd
+from arcgis.features import GeoAccessor, GeoSeriesAccessor
 
 get_mpilot_info_p = Program()
 
@@ -355,9 +357,9 @@ class EEMSModelRun(object):
         outputReportingUnits = parameters[1].value
         cmdFileNm = parameters[3].value
 
-        messages.addMessage("\nCopying Input Reporting Units to Output Reporting Units...\n(Only Keeping OBJECTID and Shape fields)")
+        #messages.addMessage("\nCopying Input Reporting Units to Output Reporting Units...\n(Only Keeping OBJECTID and Shape fields)")
 
-        self.CopyInputRUToOutputRU(inputReportingUnits, outputReportingUnits)
+        #self.CopyInputRUToOutputRU(inputReportingUnits, outputReportingUnits)
 
         messages.addMessage("\nCreating CSV file from the Input Reporting Units...")
         EEMSCSVFNm = self.CreateCSVFromInputRU(inputReportingUnits, messages)
@@ -384,8 +386,8 @@ class EEMSModelRun(object):
         messages.addMessage("\nRunning EEMS on the CSV file...")
         p.run()
 
-        messages.addMessage("\nJoining CSV file to Output Reporting Units...")
-        self.JoinCSVtoOutputRU(EEMSCSVFNm, outputReportingUnits, messages)
+        messages.addMessage("\nJoining CSV file to Output Reporting Units using Pandas...")
+        self.JoinCSVtoOutputRU(EEMSCSVFNm, inputReportingUnits, outputReportingUnits, messages)
 
         messages.addMessage("\nSuccess\n")
         return
@@ -441,14 +443,18 @@ class EEMSModelRun(object):
         return EEMSCSVFNm
 
 
-    def JoinCSVtoOutputRU(self, csv, outputRU, messages):
+    def JoinCSVtoOutputRU(self, csv, inputRU, outputRU, messages):
         """ Join the CSV containing the EEMS Input & Output Fields to the Output Reporting Units """
 
-        tmpOutTbl = "in_memory" + os.sep + 'Join_Table'
-        arcpy.CopyRows_management(csv, tmpOutTbl)
-        fieldsToJoin = ';'.join([field.name for field in arcpy.ListFields(tmpOutTbl) if field.name != 'CSVID'])
-        OIDField = arcpy.Describe(str(outputRU)).OIDFieldName
-        arcpy.JoinField_management(outputRU, OIDField, tmpOutTbl, 'CSVID', fieldsToJoin)
+        #tmpOutTbl = "in_memory" + os.sep + 'Join_Table'
+        #arcpy.CopyRows_management(csv, tmpOutTbl)
+        #fieldsToJoin = ';'.join([field.name for field in arcpy.ListFields(tmpOutTbl) if field.name != 'CSVID'])
+        OIDField = arcpy.Describe(str(inputRU)).OIDFieldName
+
+        csv_df = pd.read_csv(csv)
+        ru_sdf = pd.DataFrame.spatial.from_featureclass(inputRU, fields=[OIDField])
+        join_sdf = pd.merge(ru_sdf, csv_df, left_on="OBJECTID", right_on="CSVID", how="inner")
+        join_sdf.spatial.to_featureclass(str(outputRU), sanitize_columns=False)
 
         messages.addMessage(str(outputRU))
         return
