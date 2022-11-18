@@ -418,7 +418,7 @@ class EEMSModelRun(object):
         tmpDir = tempfile.mkdtemp()
         EEMSCSVFNm = tmpDir + os.sep + "EEMS_Output.csv"
 
-        with open(EEMSCSVFNm, 'wb') as f:
+        with open(EEMSCSVFNm, 'w') as f:
             rows = arcpy.SearchCursor(inputReportingUnits)
             csvFile = csv.writer(f)
             fieldnames = [field.name for field in arcpy.ListFields(inputReportingUnits) if field.name != 'Shape']
