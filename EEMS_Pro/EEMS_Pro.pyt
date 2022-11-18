@@ -371,7 +371,7 @@ class EEMSModelRun(object):
             p = Program.from_source(progStr)
 
             # Add the CSVID Field to the list of output fields needed.
-            EEMSOutFields = p.commands.keys() + ["CSVID"]
+            EEMSOutFields = list(p.commands.keys()) + ["CSVID"]
 
             # Add a READ command for the  CSVID Field.
             EEMSMPilotRead = p.find_command_class('EEMSRead')
