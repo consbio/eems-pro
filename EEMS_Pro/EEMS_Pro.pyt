@@ -420,7 +420,7 @@ class EEMSModelRun(object):
 
         with open(EEMSCSVFNm, 'w') as f:
             rows = arcpy.SearchCursor(inputReportingUnits)
-            csvFile = csv.writer(f)
+            csvFile = csv.writer(f, lineterminator='\n')
             fieldnames = [field.name for field in arcpy.ListFields(inputReportingUnits) if field.name != 'Shape']
 
             allRows = []
