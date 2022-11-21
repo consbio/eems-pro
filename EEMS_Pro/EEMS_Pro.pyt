@@ -5,6 +5,7 @@ import csv
 import numpy
 import sys
 from collections import OrderedDict
+from datetime import datetime
 from mpilot.program import Program
 import pandas as pd
 from arcgis.features import GeoAccessor, GeoSeriesAccessor
@@ -367,10 +368,15 @@ class EEMSModelRun(object):
         #self.CopyInputRUToOutputRU(inputReportingUnits, outputReportingUnits)
 
         messages.addMessage("\nCreating CSV file from the Input Reporting Units...")
+        start = datetime.now().replace(microsecond=0)
         EEMSCSVFNm = self.CreateCSVFromInputRU(inputReportingUnits, messages)
+        end = datetime.now()
+        delta = end - start
+        messages.addMessage("Elapsed Time (H:M:S): " + str(delta).split(".")[0])
 
         with open(cmdFileNm) as f:
             messages.addMessage("\nConverting EEMS Command File to a String...")
+            start = datetime.now()
             progStr = f.read()
             progStr = progStr.replace(inputReportingUnits, EEMSCSVFNm)
 
@@ -388,11 +394,23 @@ class EEMSModelRun(object):
             EEMSMPilotWrite = p.find_command_class('EEMSWrite')
             p.add_command(EEMSMPilotWrite, "Results", {'OutFileName': EEMSCSVFNm, 'OutFieldNames': EEMSOutFields})
 
+            end = datetime.now()
+            delta = end - start
+            messages.addMessage("Elapsed Time (H:M:S): " + str(delta).split(".")[0])
+
         messages.addMessage("\nRunning EEMS on the CSV file...")
+        start = datetime.now()
         p.run()
+        end = datetime.now()
+        delta = end - start
+        messages.addMessage("Elapsed Time (H:M:S): " + str(delta).split(".")[0])
 
         messages.addMessage("\nJoining CSV file to Output Reporting Units...")
+        start = datetime.now()
         self.JoinCSVtoOutputRU(EEMSCSVFNm, inputReportingUnits, outputReportingUnits, messages)
+        end = datetime.now()
+        delta = end - start
+        messages.addMessage("Elapsed Time (H:M:S): " + str(delta).split(".")[0])
 
         messages.addMessage("\nSuccess\n")
         return
