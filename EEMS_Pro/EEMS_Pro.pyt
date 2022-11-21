@@ -476,7 +476,7 @@ class EEMSModelRun(object):
 
 
     def JoinCSVtoOutputRUPro(self, csv, inputRU, outputRU, messages):
-        """ ArcGIS Pro (Python 3 Join): Join the CSV containing the EEMS Input & Output Fields to the Output Reporting Units using Spatial Data Frames and Pandas"""
+        """ ArcGIS Pro (Python 3 Join): Join the CSV containing the EEMS Input & Output Fields to the Output Reporting Units using Spatially Enabled Data Frames and Pandas"""
 
         OIDField = arcpy.Describe(str(inputRU)).OIDFieldName
 

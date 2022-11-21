@@ -4,7 +4,7 @@ __version__ = "0.0.3"
 
 #__version__ = "0.0.2"
 
-# Implement Spatial Data Frame/Pandas Join
+# Implement Spatially Enabled Data Frame/Pandas Join
 
 #__version__ = "0.0.1"
 
