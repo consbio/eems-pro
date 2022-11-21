@@ -8,7 +8,10 @@ from collections import OrderedDict
 from datetime import datetime
 from mpilot.program import Program
 import pandas as pd
-from arcgis.features import GeoAccessor, GeoSeriesAccessor
+
+python_major_version = sys.version_info[0]
+if python_major_version == 3:
+    from arcgis.features import GeoAccessor, GeoSeriesAccessor
 
 eems_tbx_dir = os.path.dirname(os.path.realpath(__file__))
 parent_dir = os.path.dirname(eems_tbx_dir)
@@ -17,7 +20,7 @@ sys.path.append(parent_dir)
 get_mpilot_info_p = Program()
 
 runInBackground = True
-version = "0.0.1"
+version = "0.0.3"
 cmdFileVarName = "%EEMS Command File Path%"
 inputTableVarName = "%EEMS Input Table Path%"
 
@@ -358,14 +361,17 @@ class EEMSModelRun(object):
 
     def execute(self, parameters, messages):
 
-
         inputReportingUnits = parameters[2].value
         outputReportingUnits = parameters[1].value
         cmdFileNm = parameters[3].value
 
-        #messages.addMessage("\nCopying Input Reporting Units to Output Reporting Units...\n(Only Keeping OBJECTID and Shape fields)")
-
-        #self.CopyInputRUToOutputRU(inputReportingUnits, outputReportingUnits)
+        if python_major_version == 2:
+            messages.addMessage("\nCopying Input Reporting Units to Output Reporting Units...\n(Only Keeping OBJECTID and Shape fields)")
+            start = datetime.now().replace(microsecond=0)
+            self.CopyInputRUToOutputRU(inputReportingUnits, outputReportingUnits)
+            end = datetime.now()
+            delta = end - start
+            messages.addMessage("Elapsed Time (H:M:S): " + str(delta).split(".")[0])
 
         messages.addMessage("\nCreating CSV file from the Input Reporting Units...")
         start = datetime.now().replace(microsecond=0)
@@ -407,7 +413,10 @@ class EEMSModelRun(object):
 
         messages.addMessage("\nJoining CSV file to Output Reporting Units...")
         start = datetime.now()
-        self.JoinCSVtoOutputRU(EEMSCSVFNm, inputReportingUnits, outputReportingUnits, messages)
+        if python_major_version == 2:
+            self.JoinCSVtoOutputRU(EEMSCSVFNm, outputReportingUnits, messages)
+        else:
+            self.JoinCSVtoOutputRUPro(EEMSCSVFNm, inputReportingUnits, outputReportingUnits, messages)
         end = datetime.now()
         delta = end - start
         messages.addMessage("Elapsed Time (H:M:S): " + str(delta).split(".")[0])
@@ -466,12 +475,9 @@ class EEMSModelRun(object):
         return EEMSCSVFNm
 
 
-    def JoinCSVtoOutputRU(self, csv, inputRU, outputRU, messages):
-        """ Join the CSV containing the EEMS Input & Output Fields to the Output Reporting Units """
+    def JoinCSVtoOutputRUPro(self, csv, inputRU, outputRU, messages):
+        """ ArcGIS Pro (Python 3 Join): Join the CSV containing the EEMS Input & Output Fields to the Output Reporting Units using Spatial Data Frames and Pandas"""
 
-        #tmpOutTbl = "in_memory" + os.sep + 'Join_Table'
-        #arcpy.CopyRows_management(csv, tmpOutTbl)
-        #fieldsToJoin = ';'.join([field.name for field in arcpy.ListFields(tmpOutTbl) if field.name != 'CSVID'])
         OIDField = arcpy.Describe(str(inputRU)).OIDFieldName
 
         csv_df = pd.read_csv(csv)
@@ -481,6 +487,19 @@ class EEMSModelRun(object):
 
         messages.addMessage(str(outputRU))
         return
+
+    def JoinCSVtoOutputRU(self, csv, outputRU, messages):
+        """ ArcGIS Desktop (Python 2 Join): Join the CSV containing the EEMS Input & Output Fields to the Output Reporting Units using ArcGIS JoinField method."""
+
+        tmpOutTbl = "in_memory" + os.sep + 'Join_Table'
+        arcpy.CopyRows_management(csv, tmpOutTbl)
+        fieldsToJoin = ';'.join([field.name for field in arcpy.ListFields(tmpOutTbl) if field.name != 'CSVID'])
+        OIDField = arcpy.Describe(str(outputRU)).OIDFieldName
+        arcpy.JoinField_management(outputRU, OIDField, tmpOutTbl, 'CSVID', fieldsToJoin)
+
+        messages.addMessage(str(outputRU))
+        return
+
 
 
 ############################################  Convert to Fuzzy Tools ###################################################
