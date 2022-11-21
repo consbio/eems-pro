@@ -16,7 +16,7 @@ sys.path.append(parent_dir)
 get_mpilot_info_p = Program()
 
 runInBackground = True
-version = "3.1.0a3"
+version = "0.0.1"
 cmdFileVarName = "%EEMS Command File Path%"
 inputTableVarName = "%EEMS Input Table Path%"
 
@@ -195,7 +195,7 @@ def PrintEEMSHdr():
     arcpy.AddMessage('|         EEMS - Environmental Evaluation Modeling System          |')
     arcpy.AddMessage('|                                                                  |')
     arcpy.AddMessage('| Implementation for ArcGIS Model Builder                          |')
-    arcpy.AddMessage('| Version: ' + version + ' Alpha                                             |')
+    arcpy.AddMessage('| Version: ' + version + '                                                   |')
     arcpy.AddMessage('| Conservation Biology Institute | info@consbio.org                |')
     arcpy.AddMessage('|                                                                  |')
     arcpy.AddMessage('+------------------------------------------------------------------+')
