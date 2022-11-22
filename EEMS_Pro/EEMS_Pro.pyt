@@ -552,7 +552,7 @@ class CvtToFuzzy(object):
             parameters[3].enabled = True
 
         # New for Pro: If the user changes the True or False threshold, set the threshold setting method to "Use custom values specified below".
-        if((parameters[2].altered and not parameters[2].hasBeenValidated) or (parameters[3].altered and not parameters[2].hasBeenValidated)):
+        if((parameters[2].altered and not parameters[2].hasBeenValidated) or (parameters[3].altered and not parameters[3].hasBeenValidated)):
             parameters[1].value = "Use custom values specified below"
 
         if (parameters[0].altered or parameters[1].altered) and parameters[1].value != "Use custom values specified below":
