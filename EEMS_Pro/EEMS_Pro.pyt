@@ -551,6 +551,10 @@ class CvtToFuzzy(object):
             parameters[2].enabled = True
             parameters[3].enabled = True
 
+        # New for Pro: If the user changes the True or False threshold, set the threshold setting method to "Use custom values specified below".
+        if((parameters[2].altered and not parameters[2].hasBeenValidated) or (parameters[3].altered and not parameters[2].hasBeenValidated)):
+            parameters[1].value = "Use custom values specified below"
+
         if (parameters[0].altered or parameters[1].altered) and parameters[1].value != "Use custom values specified below":
             field_values = []
             field_name = parameters[0].value
@@ -581,8 +585,9 @@ class CvtToFuzzy(object):
                         parameters[2].value = round((mean_val + (num_std_dev * std)), 8)
                         parameters[3].value = round((mean_val - (num_std_dev * std)), 8)
 
-            parameters[2].enabled = False
-            parameters[3].enabled = False
+            # In ArcGIS Desktop, grays out parameter. In Pro, hides parameter completely. Use conditional above to change method on T or F threshold change instead.
+            #parameters[2].enabled = False
+            #parameters[3].enabled = False
 
         if parameters[2].value is not None and parameters[3].value is not None:
             UpdateFieldNames(tool=self.cmd, inputField=parameters[0], validateInputField=parameters[7], resultsField=parameters[4], outputFieldName=parameters[5], displayName=parameters[-4], validateDirection=parameters[8], falseThreshold=parameters[2], trueThreshold=parameters[3])
