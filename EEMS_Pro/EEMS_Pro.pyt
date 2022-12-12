@@ -41,7 +41,7 @@ def WriteCommandToFile(cmd, outFldNm, cmdArgs, cmdFile):
     return
 
 
-def CreateMetadataDict(displayName, description, colorMap, reverseColorMap):
+def CreateMetadataDict(displayName, description, colorMap, reverseColorMap, dataSources=""):
     """ Function to create EEMS formatted metadata. Spaces are replaced with &nbsp; for EEMS Online compatibility."""
     metadata = {}
 
@@ -75,6 +75,21 @@ def CreateMetadataDict(displayName, description, colorMap, reverseColorMap):
         for key, value in charsToHTML.items():
                description = description.replace(key, value)
         metadata["Description"] = description
+
+    if dataSources and dataSources != "":
+        dataSourcesList = []
+        dataSourceHTML = "<div class=\"cf_params_div\"><b>Data Sources</b><br><br>"
+        for dataSource in dataSources:
+            dataSourceName = str(dataSource[0])
+            dataSourceURL = str(dataSource[1])
+            dataSourcesList.append([dataSourceName, dataSourceURL])
+            dataSourceHTML += dataSourceName + ": " + "<a target=_blank href=" + str(dataSourceURL) + ">" + str(dataSourceURL) + "</a><br>"
+        dataSourceHTML += "</div>"
+
+        for key, value in charsToHTML.items():
+            dataSourceHTML = dataSourceHTML.replace(key, value)
+
+        metadata["Description"] += dataSourceHTML
 
     colorMap = colorMap.split(": ")[-1]
     if reverseColorMap:
@@ -295,7 +310,18 @@ class EEMSRead(object):
         # Get field names from the input reporting units
         param1.parameterDependencies = [param0.name]
         mp = MetadataParameters()
-        params = [param0, param1, param2, param3] + mp.getParamList()
+
+        dataSource = arcpy.Parameter('DataSource', 'Data Sources', 'Input', 'GPValueTable', 'Optional', True, 'Metadata', multiValue=True)
+        # Setting the Type = Field prevents dropdown suggestions
+        dataSource.columns = [['Field', '      Source Name'], ['Field', 'URL']]
+
+        # Reorder the metadata parameters to get the Data Source below the description.
+        metadataParams = mp.getParamList()
+        colorRampReverse = metadataParams.pop()
+        colorRamp = metadataParams.pop()
+
+        params = [param0, param1, param2, param3] + metadataParams + [dataSource, colorRamp, colorRampReverse]
+
         params[-2].filter.list = cmapsList
         params[-2].value = "Sequential (2): binary"
         return params
@@ -303,8 +329,8 @@ class EEMSRead(object):
     def updateParameters(self, parameters):
         # Update Metadata Display name if NONE or if the field has changed (inputfield name <> outputfieldname)
         if parameters[1].altered:
-            if not parameters[-4].value or str(parameters[1].value) != parameters[2].value:
-                parameters[-4].value = str(parameters[1].value).replace("_", " ")
+            if not parameters[-5].value or str(parameters[1].value) != parameters[2].value:
+                parameters[-5].value = str(parameters[1].value).replace("_", " ")
 
         parameters[2].value = str(parameters[1].value)
         return
@@ -329,7 +355,7 @@ class EEMSRead(object):
             arcpy.AddWarning(warning)
             dataType = "Float"
 
-        metadataDict = CreateMetadataDict(parameters[-4].value, parameters[-3].value, parameters[-2].value, parameters[-1].value)
+        metadataDict = CreateMetadataDict(parameters[-5].value, parameters[-4].value, parameters[-2].value, parameters[-1].value, parameters[-3].value)
         cmdArgs = OrderedDict([('InFileName', inTblNm), ('InFieldName', inFldNm), ('DataType', dataType), ('Metadata', metadataDict)])
         WriteCommandToFile(self.cmd, outFldNm, cmdArgs, cmdFile)
         return
@@ -483,6 +509,8 @@ class EEMSModelRun(object):
         csv_df = pd.read_csv(csv)
         ru_sdf = pd.DataFrame.spatial.from_featureclass(inputRU, fields=[OIDField])
         join_sdf = pd.merge(ru_sdf, csv_df, left_on="OBJECTID", right_on="CSVID", how="inner")
+
+        # Fields get dropped if any input field is > 64 characters.
         join_sdf.spatial.to_featureclass(str(outputRU), sanitize_columns=False)
 
         messages.addMessage(str(outputRU))
@@ -499,7 +527,6 @@ class EEMSModelRun(object):
 
         messages.addMessage(str(outputRU))
         return
-
 
 
 ############################################  Convert to Fuzzy Tools ###################################################
