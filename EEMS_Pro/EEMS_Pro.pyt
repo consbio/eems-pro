@@ -221,6 +221,21 @@ def PrintEEMSHdr():
     arcpy.AddMessage("\n")
 
 
+def validateFieldName(fieldNameParam):
+    """ Function to validate field names. Spatially Enabled Data Frames drop fields if any field > 64 chars. """
+    fieldName = fieldNameParam.value
+    maxFieldLength = 64
+    specialCharacters = "!@#$%^&*()-+?=,<>/"
+
+    if len(fieldName) > maxFieldLength:
+        fieldNameParam.setErrorMessage("Field Name must be <= 64 characters.")
+
+    if " " in fieldName:
+        fieldNameParam.setErrorMessage("Field Name must not contain any spaces.")
+
+    if any(c in specialCharacters for c in fieldName):
+        fieldNameParam.setErrorMessage("Field Name must not contain any of the following special characters: " + specialCharacters)
+
 ################################################ Toolbox Class #########################################################
 
 
@@ -500,7 +515,6 @@ class EEMSModelRun(object):
         messages.addMessage(EEMSCSVFNm)
         return EEMSCSVFNm
 
-
     def JoinCSVtoOutputRUPro(self, csv, inputRU, outputRU, messages):
         """ ArcGIS Pro (Python 3 Join): Join the CSV containing the EEMS Input & Output Fields to the Output Reporting Units using Spatially Enabled Data Frames and Pandas"""
 
@@ -618,10 +632,11 @@ class CvtToFuzzy(object):
 
         if parameters[2].value is not None and parameters[3].value is not None:
             UpdateFieldNames(tool=self.cmd, inputField=parameters[0], validateInputField=parameters[7], resultsField=parameters[4], outputFieldName=parameters[5], displayName=parameters[-4], validateDirection=parameters[8], falseThreshold=parameters[2], trueThreshold=parameters[3])
-
         return
 
     def updateMessages(self, parameters):
+        if(parameters[4].altered):
+            validateFieldName(parameters[4])
         return
 
     def execute(self, parameters, messages):
