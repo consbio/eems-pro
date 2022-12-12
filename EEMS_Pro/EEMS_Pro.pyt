@@ -686,6 +686,8 @@ class CvtToFuzzyZScore(object):
         return
 
     def updateMessages(self, parameters):
+        if(parameters[3].altered):
+            validateFieldName(parameters[3])
         return
 
     def execute(self, parameters, messages):
@@ -741,6 +743,8 @@ class CvtToFuzzyCat(object):
         return
 
     def updateMessages(self, parameters):
+        if(parameters[3].altered):
+            validateFieldName(parameters[3])
         return
 
     def execute(self, parameters, messages):
@@ -795,6 +799,8 @@ class CvtToFuzzyCurve(object):
         return
 
     def updateMessages(self, parameters):
+        if(parameters[2].altered):
+            validateFieldName(parameters[2])
         return
 
     def execute(self, parameters, messages):
@@ -847,6 +853,8 @@ class CvtToFuzzyCurveZScore(object):
         return
 
     def updateMessages(self, parameters):
+        if(parameters[2].altered):
+            validateFieldName(parameters[2])
         return
 
     def execute(self, parameters, messages):
@@ -895,6 +903,8 @@ class CvtToBinary(object):
         return
 
     def updateMessages(self, parameters):
+        if(parameters[3].altered):
+            validateFieldName(parameters[3])
         return
 
     def execute(self, parameters, messages):
@@ -942,6 +952,8 @@ class CvtFromFuzzy(object):
         return
 
     def updateMessages(self, parameters):
+        if(parameters[3].altered):
+            validateFieldName(parameters[3])
         return
 
     def execute(self, parameters, messages):
@@ -991,9 +1003,8 @@ class CvtToFuzzyMeanToMid(object):
         return
 
     def updateMessages(self, parameters):
-        
-        """ Validate list of input fuzzy values (5 fuzzy values separated by commas) """ 
-       
+        """ Validate list of input fuzzy values (5 fuzzy values separated by commas) """
+
         if parameters[1].altered:
             try:
                 inputFuzzyValueList = [float(val) for val in parameters[1].value.split(",")]
@@ -1010,6 +1021,9 @@ class CvtToFuzzyMeanToMid(object):
             except:
                 # ALL OTHER ERRORS
                 parameters[1].setErrorMessage("Enter a list of five (no more, no less) fuzzy values separated by commas. For example: -1, -0.5, 0, 0.5, 1")
+
+        if (parameters[3].altered):
+            validateFieldName(parameters[3])
         return
 
     def execute(self, parameters, messages):
@@ -1057,6 +1071,8 @@ class FuzzyUnion(object):
         return
 
     def updateMessages(self, parameters):
+        if (parameters[1].altered):
+            validateFieldName(parameters[1])
         return
 
     def execute(self, parameters, messages):
@@ -1110,6 +1126,8 @@ class FuzzyWeightedUnion(object):
         return
 
     def updateMessages(self, parameters):
+        if (parameters[1].altered):
+            validateFieldName(parameters[1])
         return
 
     def execute(self, parameters, messages):
@@ -1155,6 +1173,8 @@ class FuzzySelectedUnion(object):
         UpdateFieldNames(tool=self.cmd, inputField=parameters[0], validateInputField=parameters[6], resultsField=parameters[3], outputFieldName=parameters[4], displayName=parameters[-4])
 
     def updateMessages(self, parameters):
+        if (parameters[3].altered):
+            validateFieldName(parameters[3])
         return
 
     def execute(self, parameters, messages):
@@ -1198,6 +1218,8 @@ class FuzzyOr(object):
         return
 
     def updateMessages(self, parameters):
+        if (parameters[1].altered):
+            validateFieldName(parameters[1])
         return
 
     def execute(self, parameters, messages):
@@ -1239,6 +1261,8 @@ class FuzzyAnd(object):
         return
 
     def updateMessages(self, parameters):
+        if (parameters[1].altered):
+            validateFieldName(parameters[1])
         return
 
     def execute(self, parameters, messages):
@@ -1281,6 +1305,8 @@ class FuzzyXOr(object):
         return
 
     def updateMessages(self, parameters):
+        if (parameters[1].altered):
+            validateFieldName(parameters[1])
         return
 
     def execute(self, parameters, messages):
@@ -1322,6 +1348,8 @@ class FuzzyNot(object):
         return
 
     def updateMessages(self, parameters):
+        if (parameters[1].altered):
+            validateFieldName(parameters[1])
         return
 
     def execute(self, parameters, messages):
@@ -1367,6 +1395,8 @@ class AMinusB(object):
         return
 
     def updateMessages(self, parameters):
+        if (parameters[2].altered):
+            validateFieldName(parameters[2])
         return
 
     def execute(self, parameters, messages):
@@ -1409,6 +1439,8 @@ class Sum(object):
         return
 
     def updateMessages(self, parameters):
+        if (parameters[1].altered):
+            validateFieldName(parameters[1])
         return
 
     def execute(self, parameters, messages):
@@ -1462,6 +1494,8 @@ class WeightedSum(object):
         return
 
     def updateMessages(self, parameters):
+        if (parameters[1].altered):
+            validateFieldName(parameters[1])
         return
 
     def execute(self, parameters, messages):
@@ -1504,6 +1538,8 @@ class Multiply(object):
         return
 
     def updateMessages(self, parameters):
+        if (parameters[1].altered):
+            validateFieldName(parameters[1])
         return
 
     def execute(self, parameters, messages):
@@ -1546,6 +1582,8 @@ class ADividedByB(object):
         return
 
     def updateMessages(self, parameters):
+        if (parameters[2].altered):
+            validateFieldName(parameters[2])
         return
 
     def execute(self, parameters, messages):
@@ -1588,6 +1626,8 @@ class Minimum(object):
         return
 
     def updateMessages(self, parameters):
+        if (parameters[1].altered):
+            validateFieldName(parameters[1])
         return
 
     def execute(self, parameters, messages):
@@ -1629,6 +1669,8 @@ class Maximum(object):
         return
 
     def updateMessages(self, parameters):
+        if (parameters[1].altered):
+            validateFieldName(parameters[1])
         return
 
     def execute(self, parameters, messages):
@@ -1670,6 +1712,8 @@ class Mean(object):
         return
 
     def updateMessages(self, parameters):
+        if (parameters[1].altered):
+            validateFieldName(parameters[1])
         return
 
     def execute(self, parameters, messages):
@@ -1720,6 +1764,8 @@ class WeightedMean(object):
         return
 
     def updateMessages(self, parameters):
+        if (parameters[1].altered):
+            validateFieldName(parameters[1])
         return
 
     def execute(self, parameters, messages):
@@ -1766,6 +1812,8 @@ class Normalize(object):
         return
 
     def updateMessages(self, parameters):
+        if (parameters[3].altered):
+            validateFieldName(parameters[3])
         return
 
     def execute(self, parameters, messages):
