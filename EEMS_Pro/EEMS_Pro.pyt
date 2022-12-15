@@ -933,15 +933,18 @@ class CvtFromFuzzy(object):
 
     def getParameterInfo(self):
         param0 = arcpy.Parameter('InputField', 'Input Field', 'Input', 'GPType', 'Required')
-        param1 = arcpy.Parameter('FalseThreshold', 'False Threshold', 'Input', 'GPDouble', 'Required')
-        param2 = arcpy.Parameter('TrueThreshold', 'True Threshold', 'Input', 'GPDouble', 'Required')
+        param1 = arcpy.Parameter('FalseThreshold', 'Convert a Fuzzy Value of -1 to...', 'Input', 'GPDouble', 'Required')
+        param2 = arcpy.Parameter('TrueThreshold', 'Convert a Fuzzy Value of +1 to....', 'Input', 'GPDouble', 'Required')
         param3 = arcpy.Parameter('ResultsField', 'Results Field', 'Input', 'GPString', 'Required')
         param4 = arcpy.Parameter('OutputFieldName', 'Output Field Name', 'Output', 'GPString', 'Derived')
         param5 = arcpy.Parameter('EEMSCommandFile', 'EEMS Command File', 'Input', 'GPString', 'Required')
         param6 = arcpy.Parameter('ValidateInputField', 'Validate Input Field', 'Input', 'GPString', 'Derived')
 
-        param1.value = -1
-        param2.value = 1
+        # An input value of -1 (in fuzzy space) will become the param1 value in the output
+        # An input value of +1 (in fuzzy space) will become the param2 value in the output
+        # Input values in between will be linearly interpolated between param 1 and param2
+        param1.value = 0 # Previously -1
+        param2.value = 100 # Previously 1
         param5.value = cmdFileVarName
 
         mp = MetadataParameters()
