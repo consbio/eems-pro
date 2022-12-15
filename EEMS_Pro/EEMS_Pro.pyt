@@ -582,8 +582,9 @@ class CvtToFuzzy(object):
         """ Set the True and False thresholds based on the user defined threshold setting method. """
 
         if parameters[0].value not in [field.name for field in arcpy.ListFields(inputTableVarName)]:
-            parameters[1].filter.list = ['Use custom values specified below']
+            parameters[1].enabled = False
         else:
+            parameters[1].enabled = True
             parameters[1].filter.list = ['Use custom values specified below',
                               'Min/Max (True Threshold > False Threshold)',
                               '0.5 Std Dev (True Threshold > False Threshold)', '1.0 Std Dev (True Threshold > False Threshold)', '1.5 Std Dev (True Threshold > False Threshold)', '2.0 Std Dev (True Threshold > False Threshold)','2.5 Std Dev (True Threshold > False Threshold)', '3.0 Std Dev (True Threshold > False Threshold)', '3.5 Std Dev (True Threshold > False Threshold)', '4.0 Std Dev (True Threshold > False Threshold)',
