@@ -6,18 +6,21 @@ import numpy
 import sys
 from collections import OrderedDict
 from datetime import datetime
-from mpilot.program import Program
+import mpilot
+#from mpilot.program import Program
 import pandas as pd
 
 pythonVersion = sys.version_info[0]
 if pythonVersion == 3:
     from arcgis.features import GeoAccessor, GeoSeriesAccessor
 
+mpilotVersion = mpilot.__version__
+
 EEMSDir = os.path.dirname(os.path.realpath(__file__))
 parentDir = os.path.dirname(EEMSDir)
 sys.path.append(parentDir)
 
-mpilotInfoProgram = Program()
+mpilotInfoProgram = mpilot.program.Program()
 
 runInBackground = True
 version = "0.0.3"
@@ -30,7 +33,7 @@ inputTableVarName = "%EEMS Input Table Path%"
 def WriteCommandToFile(cmd, outFldNm, cmdArgs, cmdFile):
     """ Function to write an EEMS Command to the Command File using mpilot. """
 
-    p = Program()  # Create a program each time a command is written to avoid duplicate command writes.
+    p = mpilot.program.Program()  # Create a program each time a command is written to avoid duplicate command writes.
     command = p.find_command_class(cmd)
     p.add_command(command, outFldNm, cmdArgs)
 
@@ -54,6 +57,7 @@ def CreateMetadataDict(displayName, description, colorMap, reverseColorMap, data
     # quotes around other arguments (e.g., outputName, DataType, etc.)
     # The DisplayName gets decoded back to ASCII for the tree diagram in spactree.js for proper display in each node.
     # HTML Entities List: https://unicode-table.com/en/html-entities
+
     charsToHTML = {" ": "&nbsp;",
                        "#": "&num;",
                        ":": "&colon;",
@@ -160,7 +164,6 @@ def UpdateFieldNames(tool, inputField, validateInputField, resultsField, outputF
                 # Prevents resetting of resultsFieldName and displayName on "Run Entire Model"
                 validateInputField.value = str(inputField.value)
 
-
         # For all conversion tools, when the user manually changes the resultsField, change the outputFieldName (bubble) and the displayName (Metadata).
         if outputFieldName.value != resultsField.value:
             outputFieldName.value = str(resultsField.value)
@@ -214,9 +217,9 @@ def PrintEEMSHdr():
     arcpy.AddMessage('|         EEMS - Environmental Evaluation Modeling System          |')
     arcpy.AddMessage('|                                                                  |')
     arcpy.AddMessage('| Implementation for ArcGIS Model Builder                          |')
-    arcpy.AddMessage('| Version: ' + version + '                                                   |')
+    arcpy.AddMessage('| Version: EEMS Pro ' + version + '                                          |')
+    arcpy.AddMessage('| Mpilot Version:  ' + mpilotVersion + '                                           |')
     arcpy.AddMessage('| Conservation Biology Institute | info@consbio.org                |')
-    arcpy.AddMessage('|                                                                  |')
     arcpy.AddMessage('+------------------------------------------------------------------+')
     arcpy.AddMessage("\n")
 
@@ -428,7 +431,7 @@ class EEMSModelRun(object):
             progStr = progStr.replace(inputReportingUnits, EEMSCSVFNm)
 
             # Parse the MPilot program string and return a new Program representing the model.
-            p = Program.from_source(progStr)
+            p = mpilot.program.Program().from_source(progStr)
 
             # Add the CSVID Field to the list of output fields needed.
             EEMSOutFields = list(p.commands.keys()) + ["CSVID"]
