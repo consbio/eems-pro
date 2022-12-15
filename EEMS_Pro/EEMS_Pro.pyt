@@ -218,7 +218,7 @@ def PrintEEMSHdr():
     arcpy.AddMessage('|                                                                  |')
     arcpy.AddMessage('| Implementation for ArcGIS Model Builder                          |')
     arcpy.AddMessage('| Version: EEMS Pro ' + version + '                                          |')
-    arcpy.AddMessage('| Mpilot Version:  ' + mpilotVersion + '                                           |')
+    arcpy.AddMessage('| Mpilot Version: ' + mpilotVersion + '                                            |')
     arcpy.AddMessage('| Conservation Biology Institute | info@consbio.org                |')
     arcpy.AddMessage('+------------------------------------------------------------------+')
     arcpy.AddMessage("\n")
