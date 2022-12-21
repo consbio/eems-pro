@@ -7,7 +7,6 @@ import sys
 from collections import OrderedDict
 from datetime import datetime
 import mpilot
-#from mpilot.program import Program
 import pandas as pd
 
 pythonVersion = sys.version_info[0]
