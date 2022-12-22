@@ -381,7 +381,7 @@ class EEMSRead(object):
 class EEMSModelRun(object):
     def __init__(self):
         self.label = "EEMS Model Run"
-        self.description = "Executes the commands in the EEMS command file on the input reporting units. Stores the results in the output reporting units."
+        self.description = "Executes the commands in the EEMS command file. Stores the results in the output reporting units."
         self.canRunInBackground = runInBackground
 
     def getParameterInfo(self):
@@ -664,8 +664,8 @@ class CvtToFuzzyZScore(object):
 
     def getParameterInfo(self):
         param0 = arcpy.Parameter('InputField', 'Input Field', 'Input', 'GPType', 'Required')
-        param1 = arcpy.Parameter('FalseThresholdZScore', 'False Threshold Z Score', 'Input', 'GPDouble', 'Required')
-        param2 = arcpy.Parameter('TrueThresholdZScore', 'True Threshold Z Score', 'Input', 'GPDouble', 'Required')
+        param1 = arcpy.Parameter('FalseThresholdZScore', 'False Threshold Z-Score', 'Input', 'GPDouble', 'Required')
+        param2 = arcpy.Parameter('TrueThresholdZScore', 'True Threshold Z-Score', 'Input', 'GPDouble', 'Required')
         param3 = arcpy.Parameter('ResultsField', 'Results Field', 'Input', 'GPString', 'Required')
         param4 = arcpy.Parameter('OutputFieldName', 'Output Field Name', 'Output', 'GPString', 'Derived')
         param5 = arcpy.Parameter('EEMSCommandFile', 'EEMS Command File', 'Input', 'GPString', 'Required')
@@ -716,7 +716,7 @@ class CvtToFuzzyCat(object):
 
     def getParameterInfo(self):
         param0 = arcpy.Parameter('InputField', 'Input Field', 'Input', 'GPType', 'Required')
-        param1 = arcpy.Parameter('Raw Value', 'Raw Value', 'Input', 'GPValueTable', 'Required')
+        param1 = arcpy.Parameter('RawToFuzzyMapping', 'Raw To Fuzzy Mapping', 'Input', 'GPValueTable', 'Required')
         param2 = arcpy.Parameter('DefaultFuzzyValue', 'Defaut Fuzzy Value', 'Input', 'GPDouble', 'Required')
         param3 = arcpy.Parameter('ResultsField', 'Results Field', 'Input', 'GPString', 'Required')
         param4 = arcpy.Parameter('OutputFieldName', 'Output Field Name', 'Output', 'GPString', 'Derived')
@@ -773,7 +773,7 @@ class CvtToFuzzyCurve(object):
 
     def getParameterInfo(self):
         param0 = arcpy.Parameter('InputField', 'Input Field', 'Input', 'GPType', 'Required')
-        param1 = arcpy.Parameter('Raw Value', 'Raw Value', 'Input', 'GPValueTable', 'Required')
+        param1 = arcpy.Parameter('RawToFuzzyMapping', 'Raw To Fuzzy Mapping', 'Input', 'GPValueTable', 'Required')
         param2 = arcpy.Parameter('ResultsField', 'Results Field', 'Input', 'GPString', 'Required')
         param3 = arcpy.Parameter('OutputFieldName', 'Output Field Name', 'Output', 'GPString', 'Derived')
         param4 = arcpy.Parameter('EEMSCommandFile', 'EEMS Command File', 'Input', 'GPString', 'Required')
@@ -828,7 +828,7 @@ class CvtToFuzzyCurveZScore(object):
 
     def getParameterInfo(self):
         param0 = arcpy.Parameter('InputField', 'Input Field', 'Input', 'GPType', 'Required')
-        param1 = arcpy.Parameter('ZScoreValue', 'Z Score Value', 'Input', 'GPValueTable', 'Required')
+        param1 = arcpy.Parameter('ZScoreToFuzzyMapping', 'Z Score To Fuzzy Mapping', 'Input', 'GPValueTable', 'Required')
         param2 = arcpy.Parameter('ResultsField', 'Results Field', 'Input', 'GPString', 'Required')
         param3 = arcpy.Parameter('OutputFieldName', 'Output Field Name', 'Output', 'GPString', 'Derived')
         param4 = arcpy.Parameter('EEMSCommandFile', 'EEMS Command File', 'Input', 'GPString', 'Required')
