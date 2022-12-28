@@ -933,7 +933,7 @@ class CvtFromFuzzy(object):
     def getParameterInfo(self):
         param0 = arcpy.Parameter('InputField', 'Input Field', 'Input', 'GPType', 'Required')
         param1 = arcpy.Parameter('FalseThreshold', 'Convert a Fuzzy Value of -1 to...', 'Input', 'GPDouble', 'Required')
-        param2 = arcpy.Parameter('TrueThreshold', 'Convert a Fuzzy Value of +1 to....', 'Input', 'GPDouble', 'Required')
+        param2 = arcpy.Parameter('TrueThreshold', 'Convert a Fuzzy Value of +1 to...', 'Input', 'GPDouble', 'Required')
         param3 = arcpy.Parameter('ResultsField', 'Results Field', 'Input', 'GPString', 'Required')
         param4 = arcpy.Parameter('OutputFieldName', 'Output Field Name', 'Output', 'GPString', 'Derived')
         param5 = arcpy.Parameter('EEMSCommandFile', 'EEMS Command File', 'Input', 'GPString', 'Required')
