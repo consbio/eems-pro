@@ -22,7 +22,7 @@ sys.path.append(parentDir)
 mpilotInfoProgram = mpilot.program.Program()
 
 runInBackground = True
-version = "0.0.3"
+version = "1.0.0"
 cmdFileVarName = "%EEMS Command File Path%"
 inputTableVarName = "%EEMS Input Table Path%"
 

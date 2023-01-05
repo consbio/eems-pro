@@ -1,4 +1,8 @@
-__version__ = "0.0.3"
+__version__ = "1.0.0"
+
+# Internal Release 
+
+#__version__ = "0.0.3"
 
 # Add ArcGIS Desktop Compatibility 
 
