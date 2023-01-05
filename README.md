@@ -19,13 +19,13 @@ For more information on fuzzy logic and EEMS, including a tutorial, please refer
 ## Requirements 
 
 ```bash
-Windows 7 or greater
+1. Windows 7 or greater
 
-ArcGIS Pro or ArcGIS Desktop (v10.6 or greater)
+2. ArcGIS Pro or ArcGIS Desktop (v10.6 or greater)
 
-MPilot (v1.2.5 or greater)
+3. MPilot (v1.2.5 or greater)
 
-The user should have formal GIS training, and be experienced with ArcGIS and ArcGIS Model Builder.  
+In addition to the software requirements listed above, the user should have formal GIS training, and be experienced with ArcGIS and ArcGIS Model Builder.  
 
 ```
 
@@ -35,7 +35,7 @@ In order to use EEMS Pro, you'll need to have ArcGIS Pro or ArcGIS Desktop Insta
 
 If you plan on using EEMS Pro with ArcGIS Desktop, you can simply install MPilot into your ArcGIS python installation using `pip` 
 ```bash
-pip install mpilot
+$ pip install mpilot
 ```
 However, if you plan on using EEMS Pro in ArcGIS Pro, you will need to install MPilot into a cloned conda environment. 
 
