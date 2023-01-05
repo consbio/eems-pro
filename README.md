@@ -25,7 +25,8 @@ For more information on fuzzy logic and EEMS, including a tutorial, please refer
 
 3. MPilot (v1.2.5 or greater)
 
-In addition to the software requirements listed above, the user should have formal GIS training, and be experienced with ArcGIS and ArcGIS Model Builder.  
+In addition to the software requirements listed above, the user should have formal GIS training, and be experienced 
+with ArcGIS and ArcGIS Model Builder.  
 ```
 
 ## Installing 
