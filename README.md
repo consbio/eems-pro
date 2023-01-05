@@ -18,7 +18,7 @@ For more information on fuzzy logic and EEMS, including a tutorial, please refer
 
 ## Requirements 
 
-```bash
+`
 1. Windows 7 or greater
 
 2. ArcGIS Pro or ArcGIS Desktop (v10.6 or greater)
@@ -27,7 +27,7 @@ For more information on fuzzy logic and EEMS, including a tutorial, please refer
 
 In addition to the software requirements listed above, the user should have formal GIS training, and be experienced with ArcGIS and ArcGIS Model Builder.  
 
-```
+`
 
 ## Installing 
 
