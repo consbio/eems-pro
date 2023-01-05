@@ -1,4 +1,4 @@
-# EEMS Pro
+# Environmental Evaluation Modeling System (EEMS) Pro
 
 The Environmental Evaluation Modeling System (EEMS) is an evaluative fuzzy logic modeling system developed by the Conservation Biology Institute (Sheehan & Gough, 2016). Simply put, fuzzy-logic allows the user to assign shades of gray to thoughts and ideas rather than being limited to the binary (true/false) determinations of traditional logic. It is this concept of "partial truth" which allows fuzzy-logic models to more accurately capture and resemble human patterns of thought. 
 
