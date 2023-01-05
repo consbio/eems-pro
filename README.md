@@ -4,7 +4,7 @@ The Environmental Evaluation Modeling System (EEMS) is an evaluative fuzzy logic
 
 EEMS modeling has been applied by CBI scientists in a range of ecological evaluations. In the Tehachapis and Southern Sierra a model incorporating data for habitat presence, habitat linkage, and disturbance was used to find areas of high ecological value and to provide guidance for reserve design to inform siting Wind Energy. For the Bureau of Land Management Rapid Ecological Assessments of the Sonoran Desert and Colorado Plateau ecoregions, several EEMS models were developed and used to evaluate a variety of current and projected ecological metrics. More recently, CBI used EEMS to help support the offshore wind energy planning process in California by developing models designed to help assess a range of considerations at a given location, such as energy potential, deployment feasibility, ocean uses, fisheries, and marine life occurrence. 
 
-EEMS is written in Python and maintained as a collection of libraries within [MPilot] (https://github.com/consbio/mpilot) (A plugin-based, environmental modeling framework developed by CBI). 
+EEMS is written in Python and maintained as a collection of libraries within [MPilot](https://github.com/consbio/mpilot) (A plugin-based, environmental modeling framework developed by CBI). 
 
 EEMS Pro consists of a set of script tools within a Python Toolbox (EEMS_Pro.pyt). It interfaces with the EEMS libraries in MPilot and allows for the visual construction of fuzzy logic models from within ESRI's ModelBuilder environment.
 
