@@ -7,6 +7,7 @@ import sys
 from collections import OrderedDict
 from datetime import datetime
 import mpilot
+from mpilot.program import Program
 import pandas as pd
 
 pythonVersion = sys.version_info[0]
@@ -19,7 +20,7 @@ EEMSDir = os.path.dirname(os.path.realpath(__file__))
 parentDir = os.path.dirname(EEMSDir)
 sys.path.append(parentDir)
 
-mpilotInfoProgram = mpilot.program.Program()
+mpilotInfoProgram = Program()
 
 runInBackground = True
 version = "1.0.0"
@@ -32,7 +33,7 @@ inputTableVarName = "%EEMS Input Table Path%"
 def WriteCommandToFile(cmd, outFldNm, cmdArgs, cmdFile):
     """ Function to write an EEMS Command to the Command File using mpilot. """
 
-    p = mpilot.program.Program()  # Create a program each time a command is written to avoid duplicate command writes.
+    p = Program()  # Create a program each time a command is written to avoid duplicate command writes.
     command = p.find_command_class(cmd)
     p.add_command(command, outFldNm, cmdArgs)
 
@@ -430,7 +431,7 @@ class EEMSModelRun(object):
             progStr = progStr.replace(inputReportingUnits, EEMSCSVFNm)
 
             # Parse the MPilot program string and return a new Program representing the model.
-            p = mpilot.program.Program().from_source(progStr)
+            p = Program().from_source(progStr)
 
             # Add the CSVID Field to the list of output fields needed.
             EEMSOutFields = list(p.commands.keys()) + ["CSVID"]
