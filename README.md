@@ -14,7 +14,7 @@ When the ModelBuilder model is run, EEMS Pro creates (1) A command (mpt) file co
 
 The current version of EEMS Pro is designed to be compatible with both ArcGIS Pro and ArcGIS Desktop. It includes a new set of data manipulation and conversion tools, interface changes, usability enhancements, bug fixes, and a set of input parameters which allows metadata to be associated with each node in a model (currently this includes a Display Name, Description, Data Sources, and a Color Map). This information is used by EEMS Online, Data Basin, and other web applications to improve model interpretation and usability.
 
-For more information on fuzzy logic and EEMS, including a tutorial, please refer to the EEMS Pro Manual. 
+For more information on fuzzy logic and EEMS, including a tutorial, please refer to the [EEMS Pro Manual](EEMS_Pro_Manual.pdf). 
 
 ## Requirements 
 
@@ -39,7 +39,7 @@ $ pip install mpilot
 ```
 However, if you plan on using EEMS Pro in ArcGIS Pro, you will need to install MPilot into a cloned conda environment. 
 
-More information on the installation process for both ArcGIS platforms is available in the EEMS Pro Manual. 
+More information on the installation process for both ArcGIS platforms is available in the [EEMS Pro Manual](EEMS_Pro_Manual.pdf). 
 
 ## Getting Started
 
