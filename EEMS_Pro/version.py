@@ -1,6 +1,10 @@
+__version__ = "1.0.0"
+
+# Production Release
+
 __version__ = "0.9.0"
 
-# Internal Release 
+# Internal Release for BETA Testing
 
 #__version__ = "0.0.3"
 
