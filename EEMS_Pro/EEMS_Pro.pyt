@@ -9,6 +9,7 @@ from datetime import datetime
 import mpilot
 from mpilot.program import Program
 import pandas as pd
+import io
 
 pythonVersion = sys.version_info[0]
 if pythonVersion == 3:
@@ -23,11 +24,26 @@ sys.path.append(parentDir)
 mpilotInfoProgram = Program()
 
 runInBackground = True
-version = "1.0.0"
+version = "1.0.1"
 cmdFileVarName = "%EEMS Command File Path%"
 inputTableVarName = "%EEMS Input Table Path%"
 
 ########################################## General Functions ###########################################################
+
+def CheckForNonASCIIChars(cmdArgs):
+    """ Raise an exception if non-ASCII characters are identified in the metadata for a command.
+        Non-ASCII characters come in from ArcGIS Tool with unicode encoding: u'Stephens\u2019&nbsp;Kangaroo&nbsp;rat'.
+        These cause an error in MPilot/Python 2.7 as well as EEMS Online. """
+
+    for k, v in cmdArgs["Metadata"].items():
+        try:
+            for char in v:
+                char.encode(encoding="ascii")
+        except:
+            field_name = str(cmdArgs["InFieldName"])
+            arcpy.AddError("\nField: " + field_name + "\n" + k + ": " + v + "\nNon-ASCII character identified: " + char
+                           + "\n\nThe " + k + " for the field \"" + field_name + "\" contains non-ASCII characters. "
+                           + "\nThese characters need to be removed or replaced prior to running EEMS.")
 
 
 def WriteCommandToFile(cmd, outFldNm, cmdArgs, cmdFile):
@@ -35,12 +51,21 @@ def WriteCommandToFile(cmd, outFldNm, cmdArgs, cmdFile):
 
     p = Program()  # Create a program each time a command is written to avoid duplicate command writes.
     command = p.find_command_class(cmd)
+
+    CheckForNonASCIIChars(cmdArgs)
+
     p.add_command(command, outFldNm, cmdArgs)
 
-    with open(cmdFile, 'a') as f:
-        # Remove quotes for EEMS Online Compatibility.
-        s = p.to_string().replace('"', '') + "\n"
-        f.write(s)
+    if pythonVersion == 2:
+        with io.open(cmdFile, 'a', encoding="ascii") as f:
+            # Remove quotes for EEMS Online Compatibility.
+            s = p.to_string().replace('"', '') + "\n"
+            f.write(s)
+    else:
+        with open(cmdFile, 'a', encoding="ascii") as f:
+            # Remove quotes for EEMS Online Compatibility.
+            s = p.to_string().replace('"', '') + "\n"
+            f.write(s)
     return
 
 

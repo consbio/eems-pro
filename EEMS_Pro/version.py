@@ -1,3 +1,7 @@
+__version__ = "1.0.1"
+
+# Check for Non-ASCII Characters 
+
 __version__ = "1.0.0"
 
 # Production Release
