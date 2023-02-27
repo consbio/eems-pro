@@ -32,7 +32,7 @@ inputTableVarName = "%EEMS Input Table Path%"
 
 def CheckForNonASCIIChars(cmdArgs):
     """ Raise an exception if non-ASCII characters are identified in the metadata for a command.
-        Non-ASCII characters come in from ArcGIS Tool with unicode encoding: u'Stephens\u2019&nbsp;Kangaroo&nbsp;rat'.
+        Non-ASCII characters come in from ArcGIS with unicode encoding: u'Stephens\u2019&nbsp;Kangaroo&nbsp;rat'.
         These cause an error in MPilot/Python 2.7 as well as EEMS Online. """
 
     for k, v in cmdArgs["Metadata"].items():
