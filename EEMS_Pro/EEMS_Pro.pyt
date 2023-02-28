@@ -56,16 +56,11 @@ def WriteCommandToFile(cmd, outFldNm, cmdArgs, cmdFile):
 
     p.add_command(command, outFldNm, cmdArgs)
 
-    if pythonVersion == 2:
-        with io.open(cmdFile, 'a', encoding="ascii") as f:
-            # Remove quotes for EEMS Online Compatibility.
-            s = p.to_string().replace('"', '') + "\n"
-            f.write(s)
-    else:
-        with open(cmdFile, 'a', encoding="ascii") as f:
-            # Remove quotes for EEMS Online Compatibility.
-            s = p.to_string().replace('"', '') + "\n"
-            f.write(s)
+    with open(cmdFile, 'a') as f:
+        # Remove quotes for EEMS Online Compatibility.
+        s = p.to_string().replace('"', '') + "\n"
+        f.write(s)
+
     return
 
 
