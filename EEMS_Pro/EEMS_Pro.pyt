@@ -9,7 +9,6 @@ from datetime import datetime
 import mpilot
 from mpilot.program import Program
 import pandas as pd
-import io
 
 pythonVersion = sys.version_info[0]
 if pythonVersion == 3:
