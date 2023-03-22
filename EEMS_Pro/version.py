@@ -1,3 +1,7 @@
+__version__ = "1.0.2"
+
+# Fix NoneType error introduced by writing header to command file   
+
 __version__ = "1.0.1"
 
 # Check for Non-ASCII Characters 
