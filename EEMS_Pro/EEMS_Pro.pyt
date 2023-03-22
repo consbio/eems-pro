@@ -323,7 +323,11 @@ class EEMSModelInitialize(object):
             arcpy.AddError('EEMS ' + version + ' for ArcGIS requires the mpilot python module. To install mpilot, follow the instructions below:\n\n1. Open up a command prompt(in Windows 10, you can do this by typing "cmd" into the Search box in the bottom left hand corner of your screen).\n2. Type in "cd C:\Python27\ArcGIS10.X\Scripts", replacing "X" with the version of ArcGIS Desktop you have installed.\n3. Type in "pip install mpilot".\n4. Restart ArcCatalog & ArcMap.')
             # Import again to prevent other tools in the model from executing.
             import mpilot
-        
+
+        parameters[1].value = parameters[0].valueAsText
+        parameters[2].value = parameters[0].valueAsText
+        parameters[4].value = parameters[3].valueAsText
+
         now = datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
         cmdFile = parameters[4].value
         
@@ -336,9 +340,6 @@ class EEMSModelInitialize(object):
             f.write('\n# Model Initialization Date: ' + str(now))
             f.write('\n\n')
 
-        parameters[1].value = parameters[0].valueAsText
-        parameters[2].value = parameters[0].valueAsText
-        parameters[4].value = parameters[3].valueAsText
         return
 
 
