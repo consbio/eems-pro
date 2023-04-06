@@ -1,7 +1,6 @@
 __version__ = "1.0.3"
 
 # Use &MediumSpace; instead of &nbsp; in the command file metadata to allow text wrapping in custom web applications.     
-
 __version__ = "1.0.2"
 
 # Fix NoneType error introduced by writing header to command file   
