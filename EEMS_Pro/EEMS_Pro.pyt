@@ -23,7 +23,7 @@ sys.path.append(parentDir)
 mpilotInfoProgram = Program()
 
 runInBackground = True
-version = "1.0.2"
+version = "1.0.3"
 cmdFileVarName = "%EEMS Command File Path%"
 inputTableVarName = "%EEMS Input Table Path%"
 
@@ -31,7 +31,7 @@ inputTableVarName = "%EEMS Input Table Path%"
 
 def CheckForNonASCIIChars(cmdArgs):
     """ Raise an exception if non-ASCII characters are identified in the metadata for a command.
-        Non-ASCII characters come in from ArcGIS with unicode encoding: u'Stephens\u2019&nbsp;Kangaroo&nbsp;rat'.
+        Non-ASCII characters come in from ArcGIS with unicode encoding: u'Stephens\u2019&MediumSpace;Kangaroo&MediumSpace;rat'.
         These cause an error in MPilot/Python 2.7 as well as EEMS Online. """
 
     for k, v in cmdArgs["Metadata"].items():
@@ -64,7 +64,7 @@ def WriteCommandToFile(cmd, outFldNm, cmdArgs, cmdFile):
 
 
 def CreateMetadataDict(displayName, description, colorMap, reverseColorMap, dataSources=""):
-    """ Function to create EEMS formatted metadata. Spaces are replaced with &nbsp; for EEMS Online compatibility."""
+    """ Function to create EEMS formatted metadata. Spaces are replaced with &MediumSpace; for EEMS Online compatibility."""
     metadata = {}
 
     # The section below replaces special characters with HTML entities.
@@ -77,7 +77,7 @@ def CreateMetadataDict(displayName, description, colorMap, reverseColorMap, data
     # The DisplayName gets decoded back to ASCII for the tree diagram in spactree.js for proper display in each node.
     # HTML Entities List: https://unicode-table.com/en/html-entities
 
-    charsToHTML = {" ": "&nbsp;",
+    charsToHTML = {" ": "&MediumSpace;",
                        "#": "&num;",
                        ":": "&colon;",
                        ",": "&sbquo;",
