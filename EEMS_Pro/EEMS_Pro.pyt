@@ -555,7 +555,7 @@ class EEMSModelRun(object):
 
         OIDField = arcpy.Describe(str(inputRU)).OIDFieldName
 
-        csv_df = pd.read_csv(csv)
+        csv_df = pd.read_csv(csv, dtype={'CSVID': 'Int32'})
         ru_sdf = pd.DataFrame.spatial.from_featureclass(inputRU, fields=[OIDField])
         join_sdf = pd.merge(ru_sdf, csv_df, left_on="OBJECTID", right_on="CSVID", how="inner")
 
